@@ -35,7 +35,7 @@ function LoginPage({}: Props) {
     },
   });
 
-  const { isAuthenticated, isLoading, login, loginWithGoogle } = useAuthStore();
+  const { isAuthenticated, isLoading, login, loginWithGoogle, loginWithFacebook } = useAuthStore();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -122,7 +122,7 @@ function LoginPage({}: Props) {
 
                 <Button
                   type="button"
-                  // onClick={loginWithFacebook}
+                  onClick={loginWithFacebook}
                   variant="outline"
                   className="w-full gap-2"
                   disabled={isLoading}

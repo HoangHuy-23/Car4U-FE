@@ -27,6 +27,16 @@ export const loginWithGoogle = async () => {
     }
 }
 
+export const loginWithFacebook = async () => {
+    try {
+        const res = await axiosClient.get("/auth/social-login?provider=facebook");
+        return res.data;
+    } catch (error) {
+        console.error("Login with Facebook error:", error);
+        throw new Error("Login with Facebook failed. Please check your credentials.");
+    }
+}
+
 export const loginSocialCallback = async (provider: String, code: String) => {
     try {
         const res = await axiosClient.get(`/auth/social-login/callback?provider=${provider}&code=${code}`);

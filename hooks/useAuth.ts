@@ -2,6 +2,7 @@ import {
   getMyProfile,
   login,
   loginSocialCallback,
+  loginWithFacebook,
   loginWithGoogle,
   logout,
   register,
@@ -19,6 +20,7 @@ interface iAuthStore {
   register: (dataRegister: DataRegister) => Promise<void>;
   getMyProfile: () => Promise<void>;
   loginWithGoogle: () => Promise<void>;
+  loginWithFacebook: () => Promise<void>;
   loginSocialCallback: (provider: string, code: string) => Promise<void>;
 }
 
@@ -95,6 +97,17 @@ export const useAuthStore = create<iAuthStore>((set, get) => ({
   loginWithGoogle: async () => {
     try {
       const res = await loginWithGoogle();
+      if (res) {
+        window.location.href = res.data;
+      }
+    } catch (error) {
+      set({ error: "An error occurred during login." });
+    }
+  },
+
+  loginWithFacebook: async () => {
+    try {
+      const res = await loginWithFacebook();
       if (res) {
         window.location.href = res.data;
       }
