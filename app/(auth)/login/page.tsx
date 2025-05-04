@@ -40,9 +40,9 @@ function LoginPage({}: Props) {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await login({ email: data.email, password: data.password });
-      toast.success("Successful registration!");
+      toast.success("Successful log in!");
     } catch (error) {
-      toast.error("Register for failure");
+      toast.error("Log in for failure");
     }
   };
   return (

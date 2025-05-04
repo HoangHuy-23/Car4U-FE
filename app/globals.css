@@ -49,8 +49,7 @@
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.5 0.15 240); /* Xanh dương trung bình cho nút chính */
-  /* --primary: oklch(0.208 0.042 265.755); */
+  --primary: oklch(0.62 0.188 259.81);
   --primary-foreground: oklch(0.984 0.003 247.858);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
@@ -89,4 +88,25 @@
   [role='button']:not(:disabled) {
     cursor: pointer
   }
+}
+
+@layer utilities {
+  .scrollable-content::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb {
+    background: #a3a3a3;
+    border-radius: 8px;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb:hover {
+    background: #7e7e7e;
+  }
+  
 }
