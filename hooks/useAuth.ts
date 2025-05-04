@@ -1,13 +1,7 @@
-import {
-  getMyProfile,
-  login,
-  loginSocialCallback,
-  loginWithFacebook,
-  loginWithGoogle,
-  logout,
-  register,
-} from "@/api/authApi";
-import { DataLogin, DataRegister, User } from "@/types";
+import axiosClient from "@/lib/axiosClient";
+import { DataLogin, DataRegister } from "@/types/auth.type";
+import { User } from "@/types/user.type";
+import Cookies from "js-cookie";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -32,15 +26,23 @@ export const useAuthStore = create<iAuthStore>()(
       user: null,
       isLoading: false,
       error: null,
-    
+
       login: async (dataLogin: DataLogin) => {
         set({ isLoading: true, error: null });
         try {
-          const res = await login(dataLogin);
-          console.log(res);
+          const res = await axiosClient.post("/auth/login", dataLogin);
           if (res) {
+            const accessToken = res.data.data.accessToken;
+            const refreshToken = res.data.data.refreshToken;
+            Cookies.set("access_token", accessToken, {
+              expires: 1,
+              secure: true,
+            });
+            Cookies.set("refresh_token", refreshToken, {
+              expires: 7,
+              secure: true,
+            });
             set({ isAuthenticated: true, error: null });
-            console.log("check isAuthenticated", get().isAuthenticated);
             await get().getMyProfile();
             window.location.href = "/";
           } else {
@@ -52,11 +54,16 @@ export const useAuthStore = create<iAuthStore>()(
           set({ isLoading: false });
         }
       },
-    
+
       logout: async () => {
         set({ isLoading: true, error: null });
         try {
-          await logout();
+          const refreshToken = Cookies.get("refresh_token") || null;
+          const res = await axiosClient.post("/auth/logout", {
+            refreshToken: refreshToken,
+          });
+          Cookies.remove("access_token");
+          Cookies.remove("refresh_token");
           set({ isAuthenticated: false, user: null, error: null });
           useAuthStore.persist.clearStorage(); // Clear the storage
           useAuthStore.persist.rehydrate(); // Rehydrate the store
@@ -66,15 +73,25 @@ export const useAuthStore = create<iAuthStore>()(
           set({ isLoading: false });
         }
       },
-    
+
       register: async (dataRegister: DataRegister) => {
         set({ isLoading: true, error: null });
         try {
-          const res = await register(dataRegister);
+          const res = await axiosClient.post("/auth/register", dataRegister);
           if (res) {
+            const accessToken = res.data.data.accessToken;
+            const refreshToken = res.data.data.refreshToken;
+            Cookies.set("access_token", accessToken, {
+              expires: 1,
+              secure: true,
+            });
+            Cookies.set("refresh_token", refreshToken, {
+              expires: 7,
+              secure: true,
+            });
             set({ isAuthenticated: true, error: null });
           } else {
-            set({ error: res.message });
+            set({ error: res });
           }
         } catch (error) {
           set({ error: "An error occurred during registration." });
@@ -82,15 +99,14 @@ export const useAuthStore = create<iAuthStore>()(
           set({ isLoading: false });
         }
       },
-    
+
       getMyProfile: async (): Promise<void> => {
         try {
-          const res = await getMyProfile();
-          console.log(res);
-          if (res) {
-            set({ user: res.data, isAuthenticated: true, error: null });
+          const { data } = await axiosClient.get("/auth/me");
+          if (data) {
+            set({ user: data.data, isAuthenticated: true, error: null });
           } else {
-            set({ error: res.message, isAuthenticated: false });
+            set({ error: data.message, isAuthenticated: false });
           }
         } catch (error) {
           set({ error: "An error occurred while fetching user profile." });
@@ -98,34 +114,55 @@ export const useAuthStore = create<iAuthStore>()(
           set({ isLoading: false });
         }
       },
-    
+
       loginWithGoogle: async () => {
         try {
-          const res = await loginWithGoogle();
-          if (res) {
-            window.location.href = res.data;
+          const { data } = await axiosClient.get(
+            "/auth/social-login?provider=google"
+          );
+          if (data) {
+            window.location.href = data.data;
           }
         } catch (error) {
           set({ error: "An error occurred during login." });
         }
       },
-    
+
       loginWithFacebook: async () => {
         try {
-          const res = await loginWithFacebook();
-          if (res) {
-            window.location.href = res.data;
+          const { data } = await axiosClient.get(
+            "/auth/social-login?provider=facebook"
+          );
+          if (data) {
+            window.location.href = data.data;
           }
         } catch (error) {
           set({ error: "An error occurred during login." });
         }
       },
-    
+
       loginSocialCallback: async (provider, code) => {
         try {
           set({ isLoading: true, error: null });
-          const res = await loginSocialCallback(provider, code);
+          const res = await axiosClient.get(
+            `/auth/social-login/callback?provider=${provider}&code=${code}`
+          );
           console.log("Login social callback response:", res);
+          if (res.data.data === null) {
+            throw new Error(
+              "Login social callback failed. Please check your credentials."
+            );
+          }
+          const accessToken = res.data.data.accessToken;
+          const refreshToken = res.data.data.refreshToken;
+          Cookies.set("access_token", accessToken, {
+            expires: 1,
+            secure: true,
+          });
+          Cookies.set("refresh_token", refreshToken, {
+            expires: 7,
+            secure: true,
+          });
           if (res) {
             set({ isAuthenticated: true, error: null });
             console.log("check isAuthenticated", get().isAuthenticated);
@@ -146,4 +183,3 @@ export const useAuthStore = create<iAuthStore>()(
     }
   )
 );
-

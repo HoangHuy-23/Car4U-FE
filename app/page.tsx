@@ -1,44 +1,42 @@
 "use client";
-import Head from 'next/head';
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useAuthStore } from '@/hooks/useAuth';
-import Hero from '@/components/homepage/Hero';
-import SearchBar from '@/components/homepage/SearchBar';
-
-
+import Head from "next/head";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useAuthStore } from "@/hooks/useAuth";
+import Hero from "@/components/shared/homepage/Hero";
+import SearchBar from "@/components/shared/homepage/SearchBar";
 
 export default function Home() {
   const [searchParams, setSearchParams] = useState({
-    location: '',
-    pickupDate: '',
-    returnDate: ''
+    location: "",
+    pickupDate: "",
+    returnDate: "",
   });
 
-  const { user} = useAuthStore()
+  const { user } = useAuthStore();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Searching with:', searchParams);
+    console.log("Searching with:", searchParams);
   };
 
   // Dữ liệu xe với đường dẫn hình ảnh (đặt trong thư mục public)
   const cars = [
-    { 
-      name: 'Toyota Camry', 
-      price: '500.000 VNĐ/ngày',
-      image: '/cars/toyota-camry.jpg' 
+    {
+      name: "Toyota Camry",
+      price: "500.000 VNĐ/ngày",
+      image: "/cars/toyota-camry.jpg",
     },
-    { 
-      name: 'Honda CR-V', 
-      price: '600.000 VNĐ/ngày',
-      image: '/cars/honda-crv.jpg' 
+    {
+      name: "Honda CR-V",
+      price: "600.000 VNĐ/ngày",
+      image: "/cars/honda-crv.jpg",
     },
-    { 
-      name: 'Mazda 3', 
-      price: '450.000 VNĐ/ngày',
-      image: '/cars/mazda-3.jpg' 
+    {
+      name: "Mazda 3",
+      price: "450.000 VNĐ/ngày",
+      image: "/cars/mazda-3.jpg",
     },
   ];
 
@@ -53,7 +51,7 @@ export default function Home() {
       {/* Main content */}
       <main className="flex-1 container mx-auto py-10">
         <section className="flex flex-col gap-12">
-        <SearchBar />
+          <SearchBar />
         </section>
 
         {/* Giới thiệu */}
@@ -61,11 +59,13 @@ export default function Home() {
           <div className="container mx-auto px-4 max-w-3xl text-center">
             <h2 className="text-2xl font-bold mb-4">About Car4U</h2>
             <p className="text-gray-600">
-            Car4U is the leading self-drive car rental system, bringing you a convenient and comfortable driving experience. With a variety of vehicles and 24/7 support services, we are always ready to accompany you on every journey.
+              Car4U is the leading self-drive car rental system, bringing you a
+              convenient and comfortable driving experience. With a variety of
+              vehicles and 24/7 support services, we are always ready to
+              accompany you on every journey.
             </p>
           </div>
         </section>
-
       </main>
 
       {/* Footer */}
@@ -73,7 +73,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h5 className="text-lg font-bold mb-4">Car4U</h5> 
+              <h5 className="text-lg font-bold mb-4">Car4U</h5>
               <p className="text-primary-foreground">
                 Your trusted partner in car rental services
               </p>

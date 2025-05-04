@@ -1,9 +1,9 @@
-import Image from 'next/image'
-import React from 'react'
-import hero from '../../public/hero.png'
-import heroBg from '../../public/hero-bg.jpg'
+import Image from "next/image";
+import React from "react";
+import hero from "../../../public/hero.png";
+import heroBg from "../../../public/hero-bg.jpg";
 
-type Props = {}
+type Props = {};
 
 const Hero = (props: Props) => {
   return (
@@ -15,7 +15,7 @@ const Hero = (props: Props) => {
       />
       <Image src={hero} alt="" className="h-[75%] w-[75%] bottom-0" />
     </div>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

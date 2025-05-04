@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:8080/api/v1",
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -35,17 +35,20 @@ axiosClient.interceptors.response.use(
     if (error.response.status === 401) {
       try {
         const refreshToken = Cookies.get("refresh_token") || null;
-        const { data } = await axios.post(
-          "/auth/refresh-token",
-          {
-            refreshToken: refreshToken,
-          }
-        );
+        const { data } = await axios.post("/auth/refresh-token", {
+          refreshToken: refreshToken,
+        });
         // Set new access token in cookies
         const newAccessToken = data.data.accessToken;
         const newRefreshToken = data.data.refreshToken;
-        Cookies.set("access_token", newAccessToken, { expires: 1, secure: true });
-        Cookies.set("refresh_token", newRefreshToken, { expires: 7, secure: true });
+        Cookies.set("access_token", newAccessToken, {
+          expires: 1,
+          secure: true,
+        });
+        Cookies.set("refresh_token", newRefreshToken, {
+          expires: 7,
+          secure: true,
+        });
         // Retry the original request with the new access token
         error.config.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosClient.request(error.config);

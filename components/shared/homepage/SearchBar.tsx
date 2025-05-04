@@ -1,10 +1,11 @@
 "use client";
-import { addHoursAndRoundMinutes } from "@/lib/date/format";
+import { addHoursAndRoundMinutes } from "@/lib/dateFormat";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import SearchLocationInput from "./SearchLocationInput";
+import { Button } from "../../ui/button";
+import { toast } from "sonner";
 import SearchDateInput from "./SearchDateInput";
-import { Button } from "../ui/button";
 
 type Props = {};
 
@@ -15,7 +16,7 @@ const SearchBar = (props: Props) => {
   tomorrow.setDate(now.getDate() + 1);
   const router = useRouter();
 
-  const [location, setLocation] = useState<string>("");
+  const [location, setLocation] = useState<string>("saigon");
   const [pickupDate, setPickupDate] = useState<Date>(now);
   const [returnDate, setReturnDate] = useState<Date>(tomorrow);
 
@@ -44,19 +45,33 @@ const SearchBar = (props: Props) => {
       setErrorPickupDate(true);
       return false;
     }
-    if (returnDateTime.getTime() - pickupDateTime.getTime() / (1000 * 60 * 60 * 24) < 1) {
+    if (
+      returnDateTime.getTime() -
+        pickupDateTime.getTime() / (1000 * 60 * 60 * 24) <
+      1
+    ) {
       setErrorReturnDate(true);
       return false;
     }
     return true;
-}
-const handleSearch = () => {
-}
+  };
+  const handleSearch = () => {
+    const isValid = revalidateForm();
+    if (isValid) {
+      router.push(
+        `/cars?location=${location}&pickupDate=${pickupDate.toISOString()}&returnDate=${returnDate.toISOString()}`
+      );
+    } else {
+      toast.warning("Please choose location!", {
+        duration: 3000,
+      });
+    }
+  };
   return (
     <div>
       <div className="md:px-32 bg-white rounded-lg shadow-md py-8 flex flex-col gap-5 text-center -mt-16 px-2">
         <h1 className="text-5xl font-bold tracking-tighter text-primary">
-        Find your companion
+          Find your companion
         </h1>
         <span className="text-xl">A great trip is coming!</span>
 
