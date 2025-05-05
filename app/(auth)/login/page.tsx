@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useAuthStore } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/auth.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import React from "react";
@@ -35,7 +35,13 @@ function LoginPage({}: Props) {
     },
   });
 
-  const { isAuthenticated, isLoading, login, loginWithGoogle, loginWithFacebook } = useAuthStore();
+  const {
+    isAuthenticated,
+    isLoading,
+    login,
+    loginWithGoogle,
+    loginWithFacebook,
+  } = useAuthStore();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {

@@ -6,6 +6,7 @@ import SearchLocationInput from "./SearchLocationInput";
 import { Button } from "../../ui/button";
 import { toast } from "sonner";
 import SearchDateInput from "./SearchDateInput";
+import { useSearchStore } from "@/stores/search.store";
 
 type Props = {};
 
@@ -16,13 +17,22 @@ const SearchBar = (props: Props) => {
   tomorrow.setDate(now.getDate() + 1);
   const router = useRouter();
 
-  const [location, setLocation] = useState<string>("saigon");
-  const [pickupDate, setPickupDate] = useState<Date>(now);
-  const [returnDate, setReturnDate] = useState<Date>(tomorrow);
+  // const [location, setLocation] = useState<string>("saigon");
+  // const [pickupDate, setPickupDate] = useState<Date>(now);
+  // const [returnDate, setReturnDate] = useState<Date>(tomorrow);
 
   const [errorLocation, setErrorLocation] = useState<boolean>(false);
   const [errorPickupDate, setErrorPickupDate] = useState<boolean>(false);
   const [errorReturnDate, setErrorReturnDate] = useState<boolean>(false);
+
+  const {
+    location,
+    setLocation,
+    pickupDate,
+    setPickupDate,
+    returnDate,
+    setReturnDate,
+  } = useSearchStore();
 
   useEffect(() => {
     now = new Date();
@@ -31,6 +41,7 @@ const SearchBar = (props: Props) => {
     tomorrow.setDate(now.getDate() + 1);
     setPickupDate(now);
     setReturnDate(tomorrow);
+    setLocation("saigon");
   }, []);
 
   const revalidateForm = () => {
@@ -38,8 +49,8 @@ const SearchBar = (props: Props) => {
       setErrorLocation(true);
       return false;
     }
-    const pickupDateTime = new Date(pickupDate);
-    const returnDateTime = new Date(returnDate);
+    const pickupDateTime = new Date(pickupDate ?? new Date());
+    const returnDateTime = new Date(returnDate ?? new Date());
     const today = new Date();
     if (pickupDateTime < today) {
       setErrorPickupDate(true);
@@ -59,7 +70,7 @@ const SearchBar = (props: Props) => {
     const isValid = revalidateForm();
     if (isValid) {
       router.push(
-        `/cars?location=${location}&pickupDate=${pickupDate.toISOString()}&returnDate=${returnDate.toISOString()}`
+        `/search?location=${location}&pickupDate=${pickupDate!.toISOString()}&returnDate=${returnDate!.toISOString()}`
       );
     } else {
       toast.warning("Please choose location!", {
@@ -104,9 +115,9 @@ const SearchBar = (props: Props) => {
               Pickup Date
             </label>
             <SearchDateInput
-              pickupDate={pickupDate}
+              pickupDate={pickupDate ?? new Date()}
               setPickupDate={setPickupDate}
-              returnDate={returnDate}
+              returnDate={returnDate ?? new Date()}
               setReturnDate={setReturnDate}
               isPick={true}
             />
@@ -119,9 +130,9 @@ const SearchBar = (props: Props) => {
               Return Date
             </label>
             <SearchDateInput
-              pickupDate={pickupDate}
+              pickupDate={pickupDate ?? new Date()}
               setPickupDate={setPickupDate}
-              returnDate={returnDate}
+              returnDate={returnDate ?? new Date()}
               setReturnDate={setReturnDate}
               isPick={false}
             />

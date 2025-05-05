@@ -26,18 +26,16 @@ import {
 } from "@/lib/dateFormat";
 import SelectTimeInput from "./SelectTimeInput";
 import { Calendar } from "../../ui/calendar";
+import { useSearchStore } from "@/stores/search.store";
 
 export function FilterDateDialog() {
   const searchParams = useSearchParams();
   const pickupDateStr = searchParams.get("pickupDate");
   const returnDateStr = searchParams.get("returnDate");
 
-  const [pickupDate, setPickupDate] = useState<Date | null>(
-    new Date(pickupDateStr || "")
-  );
-  const [returnDate, setReturnDate] = useState<Date | null>(
-    new Date(returnDateStr || "")
-  );
+  const { pickupDate, setPickupDate, returnDate, setReturnDate } =
+    useSearchStore();
+
   useEffect(() => {
     if (pickupDateStr) {
       setPickupDate(new Date(pickupDateStr));

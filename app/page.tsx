@@ -3,7 +3,7 @@ import Head from "next/head";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useAuthStore } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/auth.store";
 import Hero from "@/components/shared/homepage/Hero";
 import SearchBar from "@/components/shared/homepage/SearchBar";
 

@@ -13,7 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Building2, MapPin } from "lucide-react";
 import { Separator } from "../../ui/separator";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchStore } from "@/stores/search.store";
+import { useSearchParams } from "next/navigation";
 
 const locations = [
   { id: 1, value: "hanoi", label: "Hà Nội" },
@@ -38,9 +40,27 @@ const locations = [
 ];
 
 export function FilterLocationDialog() {
+  const [open, setOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const locationParam = searchParams.get("location");
   const [search, setSearch] = useState("");
   const isSearching = search.trim() !== "";
   const [isEditing, setIsEditing] = useState(false);
+  const { location, setLocation, fetchSearchResults, setPageNo } = useSearchStore();
+
+  useEffect(() => {
+    if (locationParam) {
+      const foundLocation = locations.find(
+        (loc) => loc.value === locationParam
+      );
+      if (foundLocation) {
+        setLocation(foundLocation.value);
+        setSearch(foundLocation.label);
+      } else {
+        setSearch(location);
+      }
+    }
+  }, []);
 
   const filteredLocations = useMemo(() => {
     const lowerCaseSearch = search.toLowerCase();
@@ -48,12 +68,33 @@ export function FilterLocationDialog() {
       location.label.toLowerCase().includes(lowerCaseSearch)
     );
   }, [search]);
+  const handleLocationChange = (location: string) => {
+    setSearch(location);
+    setIsEditing(false);
+  };
+  const locationValue = useMemo(() => {
+    const foundLocation = locations.find((loc) => loc.value === location);
+    return foundLocation ? foundLocation.label : location;
+  }, [location]);
+
+  const handleSearch = () => {
+    const foundLocation = locations.find((loc) => loc.label === search);
+    if (foundLocation) {
+      setLocation(foundLocation.value);
+      setPageNo(1); // reset page number to 1 when searching
+      fetchSearchResults();
+    } else {
+      setLocation(search);
+    }
+    setOpen(false); // close dialog here
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div className="p-0 text-left gap-1 text-foreground flex items-center cursor-pointer">
           <MapPin className="" size={18} />
-          <span className="ml-2">TP. Hồ Chí Minh</span>
+          <span className="ml-2">{locationValue}</span>
         </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -95,8 +136,8 @@ export function FilterLocationDialog() {
                       key={loc.id}
                       className="px-4 py-2 cursor-pointer hover:bg-accent"
                       onClick={() => {
+                        handleLocationChange(loc.value);
                         setSearch(loc.label); // cập nhật input
-                        setIsEditing(false); // ẩn danh sách địa điểm
                       }}
                     >
                       {loc.label}
@@ -140,7 +181,15 @@ export function FilterLocationDialog() {
         </div>
         {!isEditing && (
           <DialogFooter>
-            <Button type="submit">Search</Button>
+            <Button
+              type="submit"
+              onClick={() => {
+                handleSearch();
+                setIsEditing(false);
+              }}
+            >
+              Search
+            </Button>
           </DialogFooter>
         )}
       </DialogContent>

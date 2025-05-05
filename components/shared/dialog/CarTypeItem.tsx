@@ -21,7 +21,7 @@ const CarTypeItem: React.FC<CarTypeItemProps> = ({ icon, label, count, active, o
     >
       <Image src={icon} alt={label} width={36} height={36} className="mb-2" />
       <p className="text-sm text-center font-medium">{label}</p>
-      <p className="text-xs text-muted-foreground mt-1">{count} xe</p>
+      <p className="text-xs text-muted-foreground mt-1">{count} cars</p>
     </div>
   );
 };

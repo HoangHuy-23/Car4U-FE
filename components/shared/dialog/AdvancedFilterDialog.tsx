@@ -22,38 +22,54 @@ import {
   SelectValue,
 } from "../../ui/select";
 import { Separator } from "../../ui/separator";
+import { formatCurrency } from "@/lib/currencyFormat";
+import { useSearchStore } from "@/stores/search.store";
+import { Value } from "@radix-ui/react-select";
 
 const FEATURES = [
-  "Map",
-  "Bluetooth",
-  "360 Camera",
-  "Side Camera",
-  "Dashcam",
-  "Reversing Camera",
-  "Tire Pressure Sensor",
-  "Collision Sensor",
-  "Speed Warning",
-  "Sunroof",
-  "GPS Navigation",
-  "Child Seat",
-  "USB Port",
-  "Spare Tire",
-  "DVD Screen",
-  "Pickup Truck Bed Cover",
-  "ETC (Electronic Toll Collection)",
-  "Airbag",
+  { value: "MAP", label: "Map" },
+  { value: "BLUETOOTH", label: "Bluetooth" },
+  { value: "CAMERA_360", label: "360 Camera" },
+  { value: "SIDE_CAMERA", label: "Side Camera" },
+  { value: "DASH_CAM", label: "Dash Cam" },
+  { value: "REVERSING_CAMERA", label: "Reversing Camera" },
+  { value: "TIRE_PRESSURE_SENSOR", label: "Tire Pressure Sensor" },
+  { value: "COLLISION_SENSOR", label: "Collision Sensor" },
+  { value: "SPEED_WARNING", label: "Speed Warning" },
+  { value: "SUNROOF", label: "Sunroof" },
+  { value: "GPS_NAVIGATION", label: "GPS Navigation" },
+  { value: "CHILD_SEAT", label: "Child Seat" },
+  { value: "USB_PORT", label: "USB Port" },
+  { value: "SPARE_TIRE", label: "Spare Tire" },
+  { value: "DVD_SCREEN", label: "DVD Screen" },
+  { value: "PICKUP_TRUCK_BED_COVER", label: "Pickup Truck Bed Cover" },
+  { value: "ETC", label: "ETC (Electronic Toll Collection)" },
+  { value: "AIRBAG", label: "Airbag" },
 ];
 
 export function AdvancedFilterDialog() {
-  const [price, setPrice] = useState([0]);
-  const [kmLimit, setKmLimit] = useState([0]);
-  const [distance, setDistance] = useState([0]);
-  const [gear, setGear] = useState("all");
-  const [seat, setSeat] = useState([0]);
-  const [year, setYear] = useState([0]);
-  const [fuelConsumption, setFuelConsumption] = useState([0]);
-  const [fuelType, setFuelType] = useState("all");
-  const [features, setFeatures] = useState<string[]>([]);
+  const {
+    sortBy,
+    setSortBy,
+    price,
+    setPrice,
+    transmissionType,
+    setTransmissionType,
+    fuelType,
+    setFuelType,
+    fuelConsumption,
+    setFuelConsumption,
+    seat,
+    setSeat,
+    year,
+    setYear,
+    features,
+    setFeatures,
+    fetchSearchResults,
+    setPageNo,
+  } = useSearchStore();
+  // const [kmLimit, setKmLimit] = useState([0]);
+  // const [distance, setDistance] = useState([0]);
 
   const toggleFeature = (feature: string) => {
     setFeatures((prev) =>
@@ -61,6 +77,36 @@ export function AdvancedFilterDialog() {
         ? prev.filter((f) => f !== feature)
         : [...prev, feature]
     );
+  };
+
+  const handleReset = () => {
+    setSortBy("DEFAULT");
+    setPrice([0, 10000000]);
+    // setKmLimit([0]);
+    // setDistance([0]);
+    setTransmissionType("ALL");
+    setSeat([2, 16]);
+    setYear([0]);
+    setFuelConsumption([0]);
+    setFuelType("ALL");
+    setFeatures([]);
+    setPageNo(1);
+  };
+
+  const handleFilter = () => {
+    // Handle filter logic here
+    console.log({
+      sortBy,
+      price,
+      transmissionType,
+      seat,
+      year,
+      fuelConsumption,
+      fuelType,
+      features,
+    });
+    setPageNo(1); // Reset page number to 1 when applying filters
+    fetchSearchResults();
   };
 
   return (
@@ -80,24 +126,32 @@ export function AdvancedFilterDialog() {
           {/* Sắp xếp */}
           <div className="space-y-2">
             <Label>Sort</Label>
-            <Select>
+            <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger>
-                <SelectValue placeholder="Optimal" />
+                <SelectValue placeholder="Default" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="optimal">Optimal</SelectItem>
-                <SelectItem value="price_low">Price Low</SelectItem>
-                <SelectItem value="price_high">Price High</SelectItem>
+                <SelectItem value="DEFAULT">Default</SelectItem>
+                <SelectItem value="priceAsc">Price Low</SelectItem>
+                <SelectItem value="priceDesc">Price High</SelectItem>
+                <SelectItem value="ratingAsc">Rating Low</SelectItem>
+                <SelectItem value="ratingDesc">Rating High</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Mức giá */}
           <div className="space-y-2">
-            <Label>Price</Label>
-            <Slider value={price} onValueChange={setPrice} max={100} step={1} />
+            <Label>Price Per Day</Label>
+            <Slider
+              value={price}
+              onValueChange={(val: number[]) => setPrice([val[0], val[1]])}
+              max={10000000}
+              step={50000}
+              minStepsBetweenThumbs={1}
+            />
             <div className="text-sm text-muted-foreground">
-              {price[0] === 0 ? "Any" : `${price[0]} VND`}
+              {formatCurrency(price[0])} → {formatCurrency(price[1])}
             </div>
           </div>
 
@@ -105,12 +159,12 @@ export function AdvancedFilterDialog() {
           <div className="space-y-2">
             <Label>Transmission</Label>
             <RadioGroup
-              value={gear}
-              onValueChange={setGear}
+              value={transmissionType}
+              onValueChange={setTransmissionType}
               className="flex space-x-4"
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="all" id="gear-all" />
+                <RadioGroupItem value="ALL" id="gear-all" />
                 <Label htmlFor="gear-all">All</Label>
               </div>
               <div className="flex items-center space-x-2">
@@ -155,9 +209,16 @@ export function AdvancedFilterDialog() {
           {/* Số chỗ */}
           <div className="space-y-2">
             <Label>Seats</Label>
-            <Slider value={seat} onValueChange={setSeat} max={10} step={1} />
+            <Slider
+              value={seat}
+              onValueChange={(val: number[]) => setSeat([val[0], val[1]])}
+              min={2}
+              max={16}
+              step={1}
+              minStepsBetweenThumbs={1}
+            />
             <div className="text-sm text-muted-foreground">
-              {seat[0] === 0 ? "Any" : `${seat[0]} seats`}
+              {seat[0]} → {seat[1]} seats
             </div>
           </div>
 
@@ -172,7 +233,7 @@ export function AdvancedFilterDialog() {
               step={1}
             />
             <div className="text-sm text-muted-foreground">
-              {year[0] === 0 ? "Any" : `${year[0]}`}
+              {year[0] === 2000 ? "Any" : `After ${year[0]}`}
             </div>
           </div>
 
@@ -184,10 +245,10 @@ export function AdvancedFilterDialog() {
               onValueChange={setFuelType}
               className="flex flex-wrap gap-4"
             >
-              {["", "Gasoline", "Diesel", "Electric", "Hybrid"].map(
+              {["All", "Gasoline", "Diesel", "Electric", "Hybrid"].map(
                 (label, idx) => {
                   const value = [
-                    "all",
+                    "ALL",
                     "GASOLINE",
                     "DIESEL",
                     "ELECTRIC",
@@ -216,7 +277,7 @@ export function AdvancedFilterDialog() {
             <div className="text-sm text-muted-foreground">
               {fuelConsumption[0] === 0
                 ? "Any"
-                : `${fuelConsumption[0]} L/100km`}
+                : `From less than ${fuelConsumption[0]} L/100km`}
             </div>
           </div>
 
@@ -225,13 +286,16 @@ export function AdvancedFilterDialog() {
             <Label>Features</Label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {FEATURES.map((feature) => (
-                <div key={feature} className="flex items-center space-x-2">
+                <div
+                  key={feature.value}
+                  className="flex items-center space-x-2"
+                >
                   <Checkbox
-                    id={feature}
-                    checked={features.includes(feature)}
-                    onCheckedChange={() => toggleFeature(feature)}
+                    id={feature.value}
+                    checked={features.includes(feature.value)}
+                    onCheckedChange={() => toggleFeature(feature.value)}
                   />
-                  <Label htmlFor={feature}>{feature}</Label>
+                  <Label htmlFor={feature.value}>{feature.label}</Label>
                 </div>
               ))}
             </div>
@@ -241,8 +305,10 @@ export function AdvancedFilterDialog() {
         {/* Buttons */}
         <Separator className="my-2" />
         <div className="flex justify-between">
-          <Button variant="ghost">Reset</Button>
-          <Button>Filter</Button>
+          <Button variant="ghost" onClick={handleReset}>
+            Reset
+          </Button>
+          <Button onClick={handleFilter}>Filter</Button>
         </div>
       </DialogContent>
     </Dialog>
