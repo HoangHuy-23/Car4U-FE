@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Car, CheckIcon } from "lucide-react";
+import { Car, CheckIcon, Earth } from "lucide-react";
 import { Separator } from "../../ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -18,7 +18,7 @@ import { useState } from "react";
 const carBrands = [
   {
     value: "ALL",
-    label: "All",
+    label: "Tất cả",
     icon: "",
   },
   { value: "audi", label: "Audi", icon: "/logoBrand/audi.png" },
@@ -62,13 +62,13 @@ export function FilterBrandDialog() {
             isChecked ? "bg-primary/20" : ""
           }`}
         >
-          <Car className="" size={18} />
-          <span className="ml-1">Car Brand</span>
+          <Earth className="" size={18} />
+          <span className="ml-1">Hãng xe</span>
         </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
-          <DialogTitle className="text-center">Brand</DialogTitle>
+          <DialogTitle className="text-center">Hãng xe</DialogTitle>
         </DialogHeader>
         <Separator className="my-2" />
 

@@ -9,12 +9,12 @@ type Props = {};
 const NavItem = [
   {
     id: 1,
-    name: "About us",
+    name: "Về chúng tôi",
     link: "/about",
   },
   {
     id: 2,
-    name: "support",
+    name: "Hỗ trợ",
     link: "/support",
   },
 ];
@@ -40,7 +40,7 @@ const MainNav = (props: Props) => {
           <UserNavItem />
         ) : (
           <li className="capitalize font-semibold text-foreground hover:text-primary text-sm">
-            <Link href="/login">Log in</Link>
+            <Link href="/login">Đăng nhập</Link>
           </li>
         )}
       </ul>

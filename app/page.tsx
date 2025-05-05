@@ -57,12 +57,12 @@ export default function Home() {
         {/* Giới thiệu */}
         <section className="py-16">
           <div className="container mx-auto px-4 max-w-3xl text-center">
-            <h2 className="text-2xl font-bold mb-4">About Car4U</h2>
+            <h2 className="text-2xl font-bold mb-4">Về Car4U</h2>
             <p className="text-gray-600">
-              Car4U is the leading self-drive car rental system, bringing you a
-              convenient and comfortable driving experience. With a variety of
-              vehicles and 24/7 support services, we are always ready to
-              accompany you on every journey.
+              Car4u là hệ thống cho thuê xe tự lái hàng đầu, mang đến cho bạn
+              một Trải nghiệm lái xe thuận tiện và thoải mái. Với nhiều loại
+              phương tiện và dịch vụ hỗ trợ 24/7, chúng tôi luôn sẵn sàng đi
+              cùng bạn trên mỗi hành trình.
             </p>
           </div>
         </section>
@@ -75,31 +75,31 @@ export default function Home() {
             <div>
               <h5 className="text-lg font-bold mb-4">Car4U</h5>
               <p className="text-primary-foreground">
-                Your trusted partner in car rental services
+                Đối tác đáng tin cậy của bạn trong các dịch vụ cho thuê xe hơi
               </p>
             </div>
             <div>
-              <h6 className="font-semibold mb-4">About Us</h6>
+              <h6 className="font-semibold mb-4">Về chúng tôi</h6>
               <ul className="space-y-2 text-primary-foreground">
-                <li>Our Story</li>
-                <li>Careers</li>
-                <li>Contact</li>
+                <li>Câu chuyện của chúng tôi</li>
+                <li>Tuyển dụng</li>
+                <li>Liên hệ</li>
               </ul>
             </div>
             <div>
-              <h6 className="font-semibold mb-4">Support</h6>
+              <h6 className="font-semibold mb-4">Hỗ trợ</h6>
               <ul className="space-y-2 text-primary-foreground">
                 <li>FAQ</li>
-                <li>Help Center</li>
-                <li>Terms of Service</li>
+                <li>Trung tâm tư vấn</li>
+                <li>Điều khoản dịch vụ</li>
               </ul>
             </div>
             <div>
-              <h6 className="font-semibold mb-4">Legal</h6>
+              <h6 className="font-semibold mb-4">Chính sách</h6>
               <ul className="space-y-2 text-primary-foreground">
-                <li>Privacy Policy</li>
-                <li>Cookie Policy</li>
-                <li>Security</li>
+                <li>Chính sách bảo mật</li>
+                <li>Chính sách cookie</li>
+                <li>Bảo vệ</li>
               </ul>
             </div>
           </div>

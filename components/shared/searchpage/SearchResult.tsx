@@ -1,6 +1,6 @@
 "use client";
 import { useSearchStore } from "@/stores/search.store";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { CarCard } from "./CarCard";
 
 type Props = {};
@@ -52,6 +52,7 @@ const SearchResult = (props: Props) => {
             searchResults.map((car, index) => (
               <CarCard
                 key={index}
+                id={car.id}
                 name={car.name}
                 image={car.images[0]}
                 price={car.pricePerDay}

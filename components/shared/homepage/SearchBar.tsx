@@ -82,9 +82,9 @@ const SearchBar = (props: Props) => {
     <div>
       <div className="md:px-32 bg-white rounded-lg shadow-md py-8 flex flex-col gap-5 text-center -mt-16 px-2">
         <h1 className="text-5xl font-bold tracking-tighter text-primary">
-          Find your companion
+          Hãy bắt đầu hành trình của bạn với Car4U
         </h1>
-        <span className="text-xl">A great trip is coming!</span>
+        <span className="text-xl">Một chuyến đi tuyệt vời đang đến!</span>
 
         <form
           className="flex items-center justify-center max-md:flex-col w-full relative max-sm:gap-4 gap-6"
@@ -98,7 +98,7 @@ const SearchBar = (props: Props) => {
               htmlFor="pickUpDate"
               className="text-gray-500 font-semibold text-sm ml-2 self-start"
             >
-              Location
+              Địa điểm
             </label>
             <SearchLocationInput
               location={location}
@@ -112,7 +112,7 @@ const SearchBar = (props: Props) => {
               htmlFor="pickUpDate"
               className="text-gray-500 font-semibold text-sm ml-2 self-start"
             >
-              Pickup Date
+              Ngày nhận xe
             </label>
             <SearchDateInput
               pickupDate={pickupDate ?? new Date()}
@@ -127,7 +127,7 @@ const SearchBar = (props: Props) => {
               htmlFor="pickupDate"
               className="text-gray-500 font-semibold text-sm ml-2 self-start"
             >
-              Return Date
+              Ngày trả xe
             </label>
             <SearchDateInput
               pickupDate={pickupDate ?? new Date()}
@@ -141,7 +141,7 @@ const SearchBar = (props: Props) => {
             type="submit"
             className="bg-primary rounded-lg hover:bg-primary/30 mt-5 h-[40px]"
           >
-            Search
+            Tìm kiếm
           </Button>
         </form>
       </div>

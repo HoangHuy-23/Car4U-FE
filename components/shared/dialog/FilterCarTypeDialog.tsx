@@ -57,12 +57,12 @@ export function FilterCarTypeDialog() {
       <DialogTrigger asChild>
         <div className={`px-2 text-left gap-1 text-foreground flex items-center cursor-pointer rounded-full border border-gray-300 ${isChecked ? "bg-primary/20" : ""}`}>
           <Car className="" size={18} />
-          <span className="ml-1">Car Type</span>
+          <span className="ml-1">Loại xe</span>
         </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
-          <DialogTitle className="text-center">Type</DialogTitle>
+          <DialogTitle className="text-center">Loại xe</DialogTitle>
         </DialogHeader>
         <Separator className="my-2" />
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

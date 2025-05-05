@@ -44,7 +44,7 @@ const UserNavItem = (props: Props) => {
             href="/user-profile/my-account"
             className="font-bold hover:text-blue-500"
           >
-            My Account
+            Tài khoản của tôi
           </Link>
         </DropdownMenuItem>
         <Separator />
@@ -53,7 +53,7 @@ const UserNavItem = (props: Props) => {
             onClick={handleLogout}
             className="flex flex-1 font-bold bg-blue-500"
           >
-            Logout
+            Đăng xuất
           </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
