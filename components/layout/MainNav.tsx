@@ -1,5 +1,5 @@
 "use client";
-import { useAuthStore } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/auth.store";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import UserNavItem from "./UserNavItem";
@@ -9,12 +9,12 @@ type Props = {};
 const NavItem = [
   {
     id: 1,
-    name: "About us",
+    name: "Về chúng tôi",
     link: "/about",
   },
   {
     id: 2,
-    name: "support",
+    name: "Hỗ trợ",
     link: "/support",
   },
 ];
@@ -29,15 +29,18 @@ const MainNav = (props: Props) => {
     <nav>
       <ul className="flex space-x-6 justify-center items-center">
         {NavItem.map((item) => (
-          <li key={item.id} className="capitalize font-semibold text-foreground hover:text-primary text-sm">
+          <li
+            key={item.id}
+            className="capitalize font-semibold text-foreground hover:text-primary text-sm"
+          >
             <Link href={item.link}>{item.name}</Link>
-            </li>
+          </li>
         ))}
         {isAuthenticated ? (
           <UserNavItem />
         ) : (
           <li className="capitalize font-semibold text-foreground hover:text-primary text-sm">
-            <Link href="/login">Log in</Link>
+            <Link href="/login">Đăng nhập</Link>
           </li>
         )}
       </ul>

@@ -1,5 +1,5 @@
 "use client";
-import { useAuthStore } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/auth.store";
 import { useRouter } from "next/navigation";
 import React from "react";
 import {
@@ -41,10 +41,10 @@ const UserNavItem = (props: Props) => {
       <DropdownMenuContent>
         <DropdownMenuItem>
           <Link
-            href="/user-profile/my-account"
+            href="/profile/my-account"
             className="font-bold hover:text-blue-500"
           >
-            My Account
+            Tài khoản của tôi
           </Link>
         </DropdownMenuItem>
         <Separator />
@@ -53,7 +53,7 @@ const UserNavItem = (props: Props) => {
             onClick={handleLogout}
             className="flex flex-1 font-bold bg-blue-500"
           >
-            Logout
+            Đăng xuất
           </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
