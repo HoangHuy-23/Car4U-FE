@@ -55,7 +55,6 @@ const SearchFilter = (props: Props) => {
     setSeat([2, 16]);
     setPrice([0, 10000000]);
     setSortBy("DEFAULT");
-    fetchSearchResults();
   };
   return (
     <div className="sticky py-4 bg-white shadow-md top-16 z-40 w-full border-b">
@@ -65,7 +64,10 @@ const SearchFilter = (props: Props) => {
           <button
             className="p-0"
             // variant={"link"}
-            onClick={() => router.back()}
+            onClick={() => {
+              handleResetFilters();
+              router.back();
+            }}
           >
             <ChevronLeftCircle size={40} className="text-foreground size-5" />
           </button>
@@ -78,7 +80,10 @@ const SearchFilter = (props: Props) => {
           <button
             className="p-0"
             // variant={"link"}
-            onClick={() => handleResetFilters()}
+            onClick={() => {
+              handleResetFilters();
+              fetchSearchResults();
+            }}
           >
             <RefreshCcw size={40} className="text-foreground size-5" />
           </button>

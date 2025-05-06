@@ -16,6 +16,7 @@ import CarRentalInsurance from "./CarRentalInsurance";
 import RentalInformation from "./RentalInformation";
 import { useBookingStore } from "@/stores/booking.store";
 import { useSearchStore } from "@/stores/search.store";
+import CarOwner from "./CarOwner";
 
 type Props = {
   carId: string;
@@ -78,6 +79,12 @@ export default function CarDetail({ carId }: Props) {
           <CarRentalInsurance />
           {/* rent box */}
           <RentalInformation data={car} isLoading={isLoading} isError={false} />
+        </div>
+      </div>
+      <div className="grid lg:grid-cols-[4fr_2fr] grid-cols-1 mb-8 mt-4 gap-4">
+        <div>
+          <Separator className="mb-6"/>
+          <CarOwner carId={carId} />
         </div>
       </div>
     </div>

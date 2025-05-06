@@ -27,8 +27,8 @@ export function DateTimeRentalInformationDialog() {
   const {pickupDate, returnDate, setPickupDate, setReturnDate } = useBookingStore();
 
   const [date, setDate] = useState<DateRange | undefined>({
-    from: pickupDate ? new Date(pickupDate) : undefined,
-    to: returnDate ? new Date(returnDate) : undefined,
+    from: pickupDate ? new Date(pickupDate) : new Date(),
+    to: returnDate ? new Date(returnDate) : new Date(),
   });
   const [startTime, setStartTime] = useState<string>(
     formatTimeToString(pickupDate || new Date())
@@ -41,8 +41,8 @@ export function DateTimeRentalInformationDialog() {
 
   useEffect(() => {
     setDate({
-      from: pickupDate ? new Date(pickupDate) : undefined,
-      to: returnDate ? new Date(returnDate) : undefined,
+      from: pickupDate ? new Date(pickupDate) : new Date(),
+      to: returnDate ? new Date(returnDate) : new Date(),
     });
     setStartTime(formatTimeToString(pickupDate || new Date()));
     setEndTime(formatTimeToString(returnDate || new Date()));

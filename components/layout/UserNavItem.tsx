@@ -41,7 +41,7 @@ const UserNavItem = (props: Props) => {
       <DropdownMenuContent>
         <DropdownMenuItem>
           <Link
-            href="/user-profile/my-account"
+            href="/profile/my-account"
             className="font-bold hover:text-blue-500"
           >
             Tài khoản của tôi
