@@ -12,26 +12,44 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useUserStore } from "@/stores/user.store";
+import { useAuthStore } from "@/stores/auth.store";
+import { useBookingStore } from "@/stores/booking.store";
+import { set } from "date-fns";
+import { PickupLocation } from "@/types/contact.type";
 
 type Props = {
   data: Car | null;
 };
 
 export default function AddressRentalInformationDialog({ data }: Props) {
+  const { user } = useUserStore();
+  const { isAuthenticated } = useAuthStore();
+  const { setPickupLocation } = useBookingStore();
   const [selectedCarAddress, setSelectedCarAddress] = useState(false);
   const [selectedCusAddress, setSelectedCusAddress] = useState(false);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (user?.addresses?.length) {
+      setSelectedCusAddress(true);
+      setSelectedCarAddress(false);
+    } else {
+      setSelectedCusAddress(false);
+      setSelectedCarAddress(true);
+    }
+  }, []);
 
   const handleSelect = () => {
     if (selectedCarAddress) {
       setSelectedCarAddress(false);
       setSelectedCusAddress(true);
+      setPickupLocation(PickupLocation.USER_LOCATION);
     }
     if (selectedCusAddress) {
       setSelectedCarAddress(true);
       setSelectedCusAddress(false);
+      setPickupLocation(PickupLocation.CAR_LOCATION);
     }
   };
   const handleSave = () => {
@@ -47,9 +65,15 @@ export default function AddressRentalInformationDialog({ data }: Props) {
               Địa điểm giao nhận xe
             </label>
             <div className="flex justify-between">
-              <span>
-                {data?.location.district}, {data?.location.city}
+
+              <span className="text-sm text-gray-500">
+                {selectedCarAddress
+                  ? "Nhận xe tại vị trí xe"
+                  : "Địa chỉ của tôi"}
               </span>
+              {/* <span>
+                {data?.location.district}, {data?.location.city}
+              </span> */}
 
               <ChevronDown />
             </div>
@@ -121,7 +145,7 @@ export default function AddressRentalInformationDialog({ data }: Props) {
               </div>
             </div>
             {/* user address */}
-            {/* {isAuthenticated && (
+            {isAuthenticated && (
               <div
                 onClick={handleSelect}
                 className={`border rounded-md flex p-2 gap-2 ${
@@ -144,13 +168,14 @@ export default function AddressRentalInformationDialog({ data }: Props) {
                     Địa chỉ của tôi
                   </h1>
                   <span className="flex text-sm items-start gap-2">
-                    <User /> {user?.addresses.at(0)?.street},{" "}
-                    {user?.addresses.at(0)?.district},{" "}
-                    {user?.addresses.at(0)?.ward}, {user?.addresses.at(0)?.city}
+                    <User /> {user?.addresses?.at(0)?.street},{" "}
+                    {user?.addresses?.at(0)?.district},{" "}
+                    {user?.addresses?.at(0)?.ward},{" "}
+                    {user?.addresses?.at(0)?.city}
                   </span>
                 </div>
               </div>
-            )} */}
+            )}
           </div>
         </div>
         <DialogFooter className="">

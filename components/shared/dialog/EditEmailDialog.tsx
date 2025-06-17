@@ -1,11 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useUserStore } from "@/stores/user.store";
 import { Pencil } from "lucide-react";
 import React from "react";
 
-
 export default function DialogEditEmail() {
+  const { user } = useUserStore();
+  const [email, setEmail] = React.useState<string>(user?.email || "");
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -15,12 +24,20 @@ export default function DialogEditEmail() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit email</DialogTitle>
+          <DialogTitle>Cập nhật email</DialogTitle>
         </DialogHeader>
-        <Input id="name" placeholder="Input email" className="" />
+        <Input
+          id="name"
+          placeholder="Nhập email"
+          className=""
+          value={email || ""}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
         <DialogFooter>
           <Button type="submit" className="bg-blue-500 hover:bg-blue-300">
-            Save changes
+            Lưu
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/stores/auth.store";
 import Hero from "@/components/shared/homepage/Hero";
 import SearchBar from "@/components/shared/homepage/SearchBar";
+import { useUserStore } from "@/stores/user.store";
 
 export default function Home() {
   const [searchParams, setSearchParams] = useState({
@@ -14,7 +15,7 @@ export default function Home() {
     returnDate: "",
   });
 
-  const { user } = useAuthStore();
+  const { user } = useUserStore();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

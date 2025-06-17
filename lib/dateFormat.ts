@@ -34,7 +34,8 @@ export const formatDateToStringType1 = (date: Date) => {
   return `${hours}:${minutes}, ${day}/${month}`;
 };
 
-export const formatDateToStringType2 = (date: Date) => {
+export const formatDateToStringType2 = (dateI: Date) => {
+  const date = new Date(dateI);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
   const day = String(date.getDate()).padStart(2, "0");
@@ -43,14 +44,16 @@ export const formatDateToStringType2 = (date: Date) => {
   return `${hours}h${minutes}, ${day}/${month}/${year}`;
 };
 
-export const formatDateToStringType3 = (date: Date) => {
+export const formatDateToStringType3 = (dateI: Date) => {
+  const date = new Date(dateI);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
   const day = String(date.getDate()).padStart(2, "0");
   return `${day}/${month}/${year}`;
 };
 
-export const formatTimeToString = (date: Date) => {
+export const formatTimeToString = (dateI: Date) => {
+  const date = new Date(dateI);
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
   return `${hours}:${minutes}`;
@@ -85,7 +88,9 @@ export function addHoursAndRoundMinutes(date: Date, hoursToAdd: number) {
   return newDate;
 }
 
-export function calculateDaysDifference(date1: Date, date2: Date): number {
+export function calculateDaysDifference(date1i: Date, date2i: Date): number {
+  let date1 = new Date(date1i);
+  let date2 = new Date(date2i);
   // Ensure date1 is earlier than date2
   if (date1 > date2) {
     [date1, date2] = [date2, date1];

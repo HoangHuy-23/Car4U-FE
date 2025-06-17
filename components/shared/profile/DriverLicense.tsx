@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/stores/auth.store";
 import Image from "next/image";
+import { useUserStore } from "@/stores/user.store";
 
 export default function DriverLicense() {
   const handleChangeFileToUrl = (file: File): string => {
@@ -15,7 +16,7 @@ export default function DriverLicense() {
   };
   // const { mutate, isPending, isError } = useUploadDriverLicense();
 
-  const { user } = useAuthStore();
+  const { user } = useUserStore();
   const license = user?.driverLicense;
 
   const [isEdit, setIsEdit] = useState(false);
@@ -126,7 +127,13 @@ export default function DriverLicense() {
           <div
             className={`flex justify-center items-center h-full relative border rounded-lg`}
           >
-            <Image alt="" src={image || ""} className="absolute w-full" />
+            <Image
+              alt=""
+              src={image || "/no-image.png"}
+              className="absolute w-full h-full object-fill rounded-lg"
+              width={200}
+              height={200}
+            />
 
             <input
               disabled={!isEdit}

@@ -30,14 +30,19 @@ export default function CarDetail({ carId }: Props) {
     useBookingStore();
 
   useEffect(() => {
-    getCar(carId);
-    setSelectedCar(car);
-    setPickupDate(pickupDate);
-    setReturnDate(returnDate);
-    setLocation(location);
-    return () => {
-      setSelectedCar(null);
+    const fetchCar = async () => {
+      await getCar(carId);
     };
+    fetchCar();
+  }, [carId]);
+
+  useEffect(() => {
+    if (car) {
+      setSelectedCar(car);
+      setPickupDate(pickupDate);
+      setReturnDate(returnDate);
+      setLocation(location);
+    }
   }, [carId]);
 
   return (
@@ -46,6 +51,7 @@ export default function CarDetail({ carId }: Props) {
       <Button
         className="bg-white hover:bg-slate-50 text-blue-500 mb-8"
         onClick={() => {
+          setSelectedCar(null);
           router.back();
         }}
       >
@@ -83,7 +89,7 @@ export default function CarDetail({ carId }: Props) {
       </div>
       <div className="grid lg:grid-cols-[4fr_2fr] grid-cols-1 mb-8 mt-4 gap-4">
         <div>
-          <Separator className="mb-6"/>
+          <Separator className="mb-6" />
           <CarOwner carId={carId} />
         </div>
       </div>

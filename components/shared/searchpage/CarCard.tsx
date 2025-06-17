@@ -1,4 +1,5 @@
-import { Star } from "lucide-react";
+"use client";
+import { Heart, Star } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../../ui/card";
 import { Badge } from "../../ui/badge";
 import { formatCurrency } from "@/lib/currencyFormat";
@@ -9,6 +10,8 @@ import {
 } from "@/lib/enumFormat";
 import { useRouter } from "next/navigation";
 import { useBookingStore } from "@/stores/booking.store";
+import { useUserStore } from "@/stores/user.store";
+import { useEffect, useState } from "react";
 
 interface CarCardProps {
   id: string;
@@ -22,6 +25,7 @@ interface CarCardProps {
   discount?: number;
   rating: number;
   trips: number;
+  isLiked?: boolean; // Optional prop for liked status
 }
 
 export const CarCard = ({
@@ -36,10 +40,20 @@ export const CarCard = ({
   discount,
   rating,
   trips,
+  isLiked = false, // Default to false if not provided
 }: CarCardProps) => {
   const router = useRouter();
   const handleClick = () => {
     router.push(`/cars/${id}`); // Navigate to the car detail page
+  };
+  const { likeCar, unlikeCar } = useUserStore();
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent click from propagating to the card
+    if (isLiked) {
+      unlikeCar(id);
+    } else {
+      likeCar(id);
+    }
   };
   return (
     <Card
@@ -57,6 +71,18 @@ export const CarCard = ({
             Giảm {discount}%
           </Badge>
         )}
+        <div
+          className="absolute top-2 right-2 bg-white bg-opacity-80 px-2 py-1 rounded"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent click from propagating to the card
+            handleLikeClick(e);
+          }}
+        >
+          <Heart
+            size={16}
+            className={`text-gray-500 ${isLiked && "text-red-500 fill-current"}`}
+          />
+        </div>
       </CardHeader>
       <CardContent className="p-4 space-y-1">
         <h3 className="font-semibold text-lg">{name}</h3>

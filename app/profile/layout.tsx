@@ -7,7 +7,7 @@ export default function ProfileLayout({
 }) {
   return (
     <section className="bg-neutral-100 py-12 min-h-[100vh]">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-[2fr_5fr] ">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-[2fr_5fr] px-4">
         <ProfileNav />
         {children}
       </div>

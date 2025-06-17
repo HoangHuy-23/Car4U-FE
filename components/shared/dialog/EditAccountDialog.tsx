@@ -10,19 +10,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useAuthStore } from "@/stores/auth.store";
-import { Calendar as CalendarIcon, Pencil } from "lucide-react";
-import React, { ChangeEvent, useEffect, useState } from "react";
-
+import { useUserStore } from "@/stores/user.store";
+import { Pencil } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function DialogEditAccount() {
-  const { user } = useAuthStore();
+  const { user } = useUserStore();
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState<string>(user?.dob as unknown as string);
   const [username, setUsername] = useState<string | undefined>(
     user?.name || "user"
   );
-  const [gender, setGender] = useState<boolean | null>(user?.gender == "MALE" || true);
+  const [gender, setGender] = useState<boolean | null>(
+    user?.gender == "MALE" || true
+  );
 
   useEffect(() => {
     if (isOpen) {
