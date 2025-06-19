@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚗 Car4U Frontend
 
-## Getting Started
+Car4U là nền tảng thuê xe tự lái kết nối giữa chủ xe và người thuê xe. Đây là source code giao diện người dùng (frontend) được xây dựng bằng **Next.js 14 (App Router)** kết hợp các công nghệ hiện đại như Tailwind CSS, Zustand, shadcn/u.
 
-First, run the development server:
+## 🔧 Công nghệ sử dụng
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js 14** (App Router)
+- **React 18**
+- **Tailwind CSS**
+- **shadcn/ui** – UI Components (dựa trên Radix UI)
+- **Zustand** – quản lý trạng thái
+- **Axios** – gọi API
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📌 Tính năng nổi bật
+- 🔍 Tìm kiếm xe theo vị trí, ngày, bán kính, mức tiêu thụ nhiên liệu
+- 📅 Bộ lọc xe nâng cao (filter, pagination, geoNear)
+- 🧾 Thanh toán VNPAY tích hợp
+- 🔒 Đăng nhập với Google/Facebook
+- 💬 Chat bot AI
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎥 Video demo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+[![Watch the demo](https://th.bing.com/th/id/OIP.73NSUbqteZMSxtis-CRzDwHaEK?rs=1&pid=ImgDetMain)](https://drive.google.com/file/d/1Y8WeYhJIe4uMRF2urwownr12gPZqtnSz/view?usp=sharing)
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
