@@ -16,12 +16,7 @@ import { Calendar, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-type Props = {
-  isContactInfo: boolean;
-  carId: string;
-};
-
-export default function page({ isContactInfo, carId }: Props) {
+export default function page() {
   const {
     selectedCar,
     pickupDate,

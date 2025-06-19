@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { useBookingStore } from "@/stores/booking.store";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "sonner";
 
 export default function page() {
   const router = useRouter();
-  const { getPaymentLink} = useBookingStore();
+  const { getPaymentLink } = useBookingStore();
   const handleBtnVNPay = async () => {
     const payment = await getPaymentLink(2500000);
     router.push(`${payment.paymentUrl}`);
@@ -17,7 +18,12 @@ export default function page() {
         Chọn phương thức thanh toán
       </h1>
       <div className="flex justify-around mt-6">
-        <Button className="bg-purple-500 hover:bg-purple-300 w-[240px]">
+        <Button
+          className="bg-purple-500 hover:bg-purple-300 w-[240px]"
+          onClick={() => {
+            toast.error("Chức năng này đang được phát triển.");
+          }}
+        >
           Momo
         </Button>
         <Button

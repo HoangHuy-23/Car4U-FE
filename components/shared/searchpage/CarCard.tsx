@@ -20,6 +20,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CarStatus } from "@/types/car.type";
+import { useAuthStore } from "@/stores/auth.store";
+import { toast } from "sonner";
 
 interface CarCardProps {
   id: string;
@@ -55,6 +57,7 @@ export const CarCard = ({
   isMyCarItem = false, // Default to false if not provided
 }: CarCardProps) => {
   const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
   const handleClick = () => {
     if (isMyCarItem) {
       // If it's a car from the user's own list, navigate to the edit page
@@ -66,6 +69,10 @@ export const CarCard = ({
   const { likeCar, unlikeCar } = useUserStore();
   const handleLikeClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent click from propagating to the card
+    if (!isAuthenticated) {
+      toast.error("Bạn cần đăng nhập để thích xe này");
+      return;
+    }
     if (isLiked) {
       unlikeCar(id);
     } else {

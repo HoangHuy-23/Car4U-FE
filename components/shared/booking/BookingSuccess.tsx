@@ -13,12 +13,12 @@ type Props = {
 export default function BookingSuccess({ isSuccess }: Props) {
   const router = useRouter();
   const { contact, selectedCar, owner, fetchOwner } = useBookingStore();
-  const { user } = contact || {};
+  const { renter } = contact || {};
   useEffect(() => {
     if (owner === null) {
       fetchOwner(contact?.car?.id as string);
     }
-  },[]);
+  }, []);
   return (
     <div className={`${isSuccess ? "flex" : "hidden"} flex-col w-full`}>
       <h1 className="text-left w-full text-2xl font-semibold">Cám ơn bạn!</h1>
@@ -33,11 +33,11 @@ export default function BookingSuccess({ isSuccess }: Props) {
           <p className="text-lg font-medium text-left w-full">Người thuê</p>
           <div className="w-full flex justify-between">
             <p>Họ và tên:</p>
-            <p>{contact?.user?.name}</p>
+            <p>{contact?.renter?.name}</p>
           </div>
           <div className="w-full flex justify-between">
             <p>Số điện thoại:</p>
-            <p>{contact?.user?.phone}</p>
+            <p>{contact?.renter?.phone}</p>
           </div>
         </div>
         <div className="w-full gap-2 flex flex-col">
@@ -57,15 +57,14 @@ export default function BookingSuccess({ isSuccess }: Props) {
             <p>Thời gian lập hợp đồng</p>
             <p>
               {formatDateToStringType2(
-                new Date(contact?.createAt as unknown as string)
+                new Date(contact?.createdAt as unknown as string)
               )}
             </p>
           </div>
           <div className="w-full flex justify-between">
             <p>Loại xe</p>
             <p>
-              {selectedCar?.brand} {selectedCar?.model}{" "}
-              {selectedCar?.year}
+              {selectedCar?.brand} {selectedCar?.model} {selectedCar?.year}
             </p>
           </div>
           <div className="w-full flex justify-between">
@@ -92,9 +91,10 @@ export default function BookingSuccess({ isSuccess }: Props) {
               </p>
             ) : (
               <p className="">
-                {user?.addresses?.at(0)?.street},{" "}
-                {user?.addresses?.at(0)?.district}, {user?.addresses?.at(0)?.ward}
-                , {user?.addresses?.at(0)?.city}
+                {renter?.addresses?.at(0)?.street},{" "}
+                {renter?.addresses?.at(0)?.district},{" "}
+                {renter?.addresses?.at(0)?.ward},{" "}
+                {renter?.addresses?.at(0)?.city}
               </p>
             )}
           </div>
@@ -112,7 +112,7 @@ export default function BookingSuccess({ isSuccess }: Props) {
         <div className="w-full ">
           <div className="flex justify-between ">
             <span className="font-semibold">Tổng cộng tiền thuê xe:</span>
-            <span>{formatCurrency(contact?.totalPrice || 0)} đ</span>
+            <span>{formatCurrency(contact?.totalFee || 0)} đ</span>
           </div>
           <span className="text-sm">Thu khi nhận xe.</span>
         </div>

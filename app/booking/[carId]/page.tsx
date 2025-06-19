@@ -1,16 +1,12 @@
 "use client";
-import BookingSuccess from "@/components/shared/booking/BookingSuccess";
-import ContactInformation from "@/components/shared/booking/ContactInformation";
-import Payment from "@/components/shared/booking/Payment";
 import { useBookingStore } from "@/stores/booking.store";
-import { use } from "react"; // <== Quan trọng
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Page({
-  params,
-}: {
-  params: Promise<{ carId: string }>;
-}) {
+interface BookingPageProps {
+  params: { carId: string };
+}
+
+export default function Page({ params }: BookingPageProps) {
   const { bookingStep } = useBookingStore();
 
   const [isContact, setIsContact] = useState<boolean>(false);
@@ -18,7 +14,7 @@ export default function Page({
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [totalRent, setTotalRent] = useState<number>(0);
 
-  const { carId } = use(params); // ✅ Dùng use() để unwrap Promise
+  const carId = params.carId;
 
   const updateState = (bookingStep: number | null) => {
     switch (bookingStep) {
