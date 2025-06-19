@@ -18,7 +18,7 @@ export type RentalContact = {
     depositFee: number;
     collateralAmount?: number;
     status: RentalStatus | RentalStatus.PENDING;
-    createAt?: Date | null;
+    createdAt?: Date | null;
 };
 
 export enum PickupLocation {

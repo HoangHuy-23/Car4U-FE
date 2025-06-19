@@ -1,6 +1,13 @@
 import axiosClient from "@/lib/axiosClient";
 import { Car } from "@/types/car.type";
-import { User, UserAddress } from "@/types/user.type";
+import { RentalContact } from "@/types/contact.type";
+import {
+  DriverLicense,
+  User,
+  UserAddress,
+  UserProfileUpdate,
+} from "@/types/user.type";
+import { toast } from "sonner";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -18,11 +25,27 @@ interface iUserStore {
   // Methods for liking and unliking cars
   likeCar: (carId: string) => Promise<void>;
   unlikeCar: (carId: string) => Promise<void>;
+  // Method for disabling car
+  disableCar: (carId: string) => Promise<void>;
+  // Method for enabling car
+  enableCar: (carId: string) => Promise<void>;
   // Method for address management
   addAddress: (address: UserAddress) => Promise<void>;
   updateAddress: (addressId: string, address: UserAddress) => Promise<void>;
   deleteAddress: (addressId: string) => Promise<void>;
   makeAddressDefault: (addressId: string) => Promise<void>;
+  // Method for driver license management
+  updateDriverLicense: (license: DriverLicense) => Promise<void>;
+  // Method for update user profile
+  updatePhone: (phone: string) => Promise<void>;
+  updateInfo: (data: UserProfileUpdate) => Promise<void>;
+  // Method to get contact by renter
+  myContact: RentalContact[] | null;
+  getContactsByRenter: () => Promise<void>;
+  // Method to get contact by owner
+  ownerContact: RentalContact[] | null;
+  getContactsByOwner: () => Promise<void>;
+  // Method to clear the store
   clear: () => void;
 }
 
@@ -34,6 +57,8 @@ export const useUserStore = create<iUserStore>()(
       error: null,
       myCars: null,
       likedCars: null,
+      myContact: null,
+      ownerContact: null,
 
       setUser: (user) => {
         set({ user });
@@ -115,6 +140,40 @@ export const useUserStore = create<iUserStore>()(
           set({ isLoading: false });
         }
       },
+      disableCar: async (carId) => {
+        set({ isLoading: true, error: null });
+        try {
+          const res = await axiosClient.put(`/cars/${carId}/disable`);
+          set({
+            myCars: get().myCars?.map((car) =>
+              car.id === carId ? res.data.data : car
+            ),
+          });
+          toast.success("Xe đã được vô hiệu hóa thành công.");
+        } catch (error) {
+          set({ error: "Failed to disable car." });
+          toast.error("Vô hiệu hóa xe thất bại.");
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+      enableCar: async (carId) => {
+        set({ isLoading: true, error: null });
+        try {
+          const res = await axiosClient.put(`/cars/${carId}/enable`);
+          set({
+            myCars: get().myCars?.map((car) =>
+              car.id === carId ? res.data.data : car
+            ),
+          });
+          toast.success("Xe đã được kích hoạt thành công.");
+        } catch (error) {
+          set({ error: "Failed to enable car." });
+          toast.error("Kích hoạt xe thất bại.");
+        } finally {
+          set({ isLoading: false });
+        }
+      },
       //      // Address management methods
       addAddress: async (address) => {
         set({ isLoading: true, error: null });
@@ -166,6 +225,98 @@ export const useUserStore = create<iUserStore>()(
           set({ user: res.data.data });
         } catch (error) {
           set({ error: "Failed to make address default." });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+      // Driver license management method
+      updateDriverLicense: async (license) => {
+        set({ isLoading: true, error: null });
+        toast.loading("Đang cập nhật...", {
+          id: "update-license",
+        });
+        try {
+          const form = new FormData();
+          form.append("licenseNumber", license.licenseNumber);
+          form.append("name", license.name);
+          const formattedDob = new Date(license.dob).toISOString().slice(0, 10); // "2024-06-04"
+          form.append("dob", formattedDob);
+
+          if (license.file) {
+            form.append("file", license.file);
+          }
+          const res = await axiosClient.put(
+            "/users/update-driver-license",
+            form,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          set({ user: res.data.data });
+          toast.success("Cập nhật giấy phép lái xe thành công.", {
+            id: "update-license",
+          });
+        } catch (error) {
+          set({ error: "Failed to update driver license." });
+          toast.error("Cập nhật giấy phép lái xe thất bại.", {
+            id: "update-license",
+          });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+      // Update phone number
+      updatePhone: async (phone) => {
+        set({ isLoading: true, error: null });
+        try {
+          const res = await axiosClient.put(
+            `/users/update-phone?phone=${phone} `
+          );
+          set({ user: res.data.data });
+          toast.success("Cập nhật số điện thoại thành công.");
+        } catch (error) {
+          set({ error: "Failed to update phone number." });
+          toast.error("Cập nhật số điện thoại thất bại.");
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+      // Update user information
+      updateInfo: async (data) => {
+        set({ isLoading: true, error: null });
+        try {
+          const res = await axiosClient.put("/users/update-info", data);
+          set({ user: res.data.data });
+          toast.success("Cập nhật thông tin thành công.");
+        } catch (error) {
+          set({ error: "Failed to update user information." });
+          toast.error("Cập nhật thông tin thất bại.");
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+      // Method to get contacts by renter
+      getContactsByRenter: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const res = await axiosClient.get("/rental-contacts/renter");
+          set({ myContact: res.data.data });
+        } catch (error) {
+          set({ error: "Failed to fetch contacts by renter." });
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+      // Method to get contacts by owner
+      getContactsByOwner: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const res = await axiosClient.get("/rental-contacts/owner");
+          set({ ownerContact: res.data.data });
+        } catch (error) {
+          set({ error: "Failed to fetch contacts by owner." });
         } finally {
           set({ isLoading: false });
         }

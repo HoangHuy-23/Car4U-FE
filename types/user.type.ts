@@ -24,8 +24,9 @@ export type DriverLicense = {
   licenseNumber: string;
   name: string;
   dob: Date;
-  image: string | null;
-  isVerified: boolean;
+  image?: string | null;
+  isVerified?: boolean;
+  file?: File | null; // For uploading new license image
 };
 
 export type UserAddress = {
@@ -40,3 +41,9 @@ export type UserAddress = {
   coordinates: number[];
   type: string; // "HOME" | "WORK" | "OTHER"
 };
+
+export type UserProfileUpdate = {
+  name: string;
+  dob: Date | null;
+  gender: string;
+}

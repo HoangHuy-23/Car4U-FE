@@ -3,10 +3,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDateToStringWithoutTime } from "@/lib/dateFormat";
 import { useUserStore } from "@/stores/user.store";
-import { Link, Luggage, Star } from "lucide-react";
+import { CheckCircle, Link, Luggage, Star } from "lucide-react";
 import { DialogEditAccount } from "../dialog/EditAccountDialog";
 import DialogEditEmail from "../dialog/EditEmailDialog";
 import DialogEditPhone from "../dialog/EditPhoneDialog";
+import { Button } from "@/components/ui/button";
 
 export default function AccountInfo() {
   const { user } = useUserStore();
@@ -47,7 +48,7 @@ export default function AccountInfo() {
               "--/--/--"}
           </div>
           <div className="flex px-2 py-2 border rounded-md justify-center">
-            {user?.rating === null || user?.rating==0 ? (
+            {user?.rating === null || user?.rating == 0 ? (
               <>
                 <Star className="text-gray-400" />
                 <span className="mx-2 font-bold text-sm">Chưa có đánh giá</span>
@@ -72,7 +73,13 @@ export default function AccountInfo() {
             </div>
             <div className="flex justify-between">
               <p className="text-sm">Giới tính</p>
-              <p>{`${user?.gender === "" ? "--/--/--" : user?.gender}`}</p>
+              <p>{`${
+                user?.gender === ""
+                  ? "--/--/--"
+                  : user?.gender == "male"
+                  ? "Nam"
+                  : "Nữ"
+              }`}</p>
             </div>
           </div>
           {/* contact */}
@@ -88,7 +95,13 @@ export default function AccountInfo() {
               <p className="text-sm">Email</p>
               <div className="flex justify-center items-center">
                 <p>{`${user?.email === null ? "--/--/--" : user?.email}`}</p>
-                <DialogEditEmail />
+                {/* <DialogEditEmail /> */}
+                <Button
+                  variant="link"
+                  className="ml-2 rounded-full px-2 py-2 text-green-500"
+                >
+                  <CheckCircle width={16} height={16} />
+                </Button>
               </div>
             </div>
             {/* <div className="flex justify-between">

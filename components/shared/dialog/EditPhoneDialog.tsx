@@ -14,7 +14,7 @@ import { Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function DialogEditPhone() {
-  const { user } = useUserStore();
+  const { user, updatePhone } = useUserStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [phone, setPhone] = useState(user?.phone);
@@ -26,16 +26,10 @@ export default function DialogEditPhone() {
   }, [isOpen, user]);
 
   const handleSave = () => {
-    // if (user && user.id !== undefined) {
-    //   const req: User = {
-    //     ...user,
-    //     phone: user.phone,
-    //   };
-    //   mutate(req);
-    //   setIsOpen(false);
-    // } else {
-    //   console.error("Phone number update error");
-    // }
+    if (phone && phone !== user?.phone) {
+      updatePhone(phone);
+    }
+    setIsOpen(false);
   };
 
   return (

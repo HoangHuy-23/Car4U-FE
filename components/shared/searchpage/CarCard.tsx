@@ -12,6 +12,14 @@ import { useRouter } from "next/navigation";
 import { useBookingStore } from "@/stores/booking.store";
 import { useUserStore } from "@/stores/user.store";
 import { useEffect, useState } from "react";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { CarStatus } from "@/types/car.type";
 
 interface CarCardProps {
   id: string;
@@ -25,7 +33,9 @@ interface CarCardProps {
   discount?: number;
   rating: number;
   trips: number;
+  status?: CarStatus; // Optional prop for car status
   isLiked?: boolean; // Optional prop for liked status
+  isMyCarItem?: boolean; // Optional prop for distinguishing my car items
 }
 
 export const CarCard = ({
@@ -40,10 +50,17 @@ export const CarCard = ({
   discount,
   rating,
   trips,
+  status,
   isLiked = false, // Default to false if not provided
+  isMyCarItem = false, // Default to false if not provided
 }: CarCardProps) => {
   const router = useRouter();
   const handleClick = () => {
+    if (isMyCarItem) {
+      // If it's a car from the user's own list, navigate to the edit page
+      // router.push(`/cars/edit/${id}`);
+      return;
+    }
     router.push(`/cars/${id}`); // Navigate to the car detail page
   };
   const { likeCar, unlikeCar } = useUserStore();
@@ -53,6 +70,32 @@ export const CarCard = ({
       unlikeCar(id);
     } else {
       likeCar(id);
+    }
+  };
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    // Set the initial state of the switch based on the car status
+    console.log("Car status:", status);
+    if (status?.toString() == "AVAILABLE") {
+      setEnabled(true);
+    } else if (status?.toString() == "UNAVAILABLE") {
+      setEnabled(false);
+    }
+  }, [status, isMyCarItem]);
+  const { disableCar, enableCar } = useUserStore();
+  const handleSwitchChange = (checked: boolean) => {
+    setEnabled(checked);
+    // Here you can add logic to update the car status in the backend
+    if (checked) {
+      // If the switch is turned on, set the car status to AVAILABLE
+      enableCar(id);
+      console.log(`Car ${id} is now AVAILABLE`);
+      // Call your API to update the car status to AVAILABLE
+    } else {
+      // If the switch is turned off, set the car status to UNAVAILABLE
+      disableCar(id);
+      console.log(`Car ${id} is now UNAVAILABLE`);
+      // Call your API to update the car status to UNAVAILABLE
     }
   };
   return (
@@ -71,18 +114,42 @@ export const CarCard = ({
             Giảm {discount}%
           </Badge>
         )}
-        <div
-          className="absolute top-2 right-2 bg-white bg-opacity-80 px-2 py-1 rounded"
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent click from propagating to the card
-            handleLikeClick(e);
-          }}
-        >
-          <Heart
-            size={16}
-            className={`text-gray-500 ${isLiked && "text-red-500 fill-current"}`}
-          />
-        </div>
+        {isMyCarItem ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div
+                  className="absolute top-2 right-2 bg-opacity-80 z-20"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Switch
+                    checked={enabled}
+                    onCheckedChange={handleSwitchChange}
+                    className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="z-50">
+                <span>{enabled ? "Hoạt động" : "Ngừng hoạt động"}</span>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <div
+            className="absolute top-2 right-2 bg-white bg-opacity-80 px-2 py-1 rounded"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent click from propagating to the card
+              handleLikeClick(e);
+            }}
+          >
+            <Heart
+              size={16}
+              className={`text-gray-500 ${
+                isLiked && "text-red-500 fill-current"
+              }`}
+            />
+          </div>
+        )}
       </CardHeader>
       <CardContent className="p-4 space-y-1">
         <h3 className="font-semibold text-lg">{name}</h3>

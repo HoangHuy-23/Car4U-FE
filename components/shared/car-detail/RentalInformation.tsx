@@ -13,6 +13,8 @@ import { useSearchStore } from "@/stores/search.store";
 import { useBookingStore } from "@/stores/booking.store";
 import { calculateDaysDifference } from "@/lib/dateFormat";
 import { calculatorInsurance, calculatorRentalFee } from "@/lib/calculator";
+import { useUserStore } from "@/stores/user.store";
+import { toast } from "sonner";
 
 type Props = {
   data: Car | null;
@@ -40,8 +42,18 @@ export default function RentalInformation({ data, isLoading, isError }: Props) {
     setDaysDifference(updatedDaysDifference);
   }, [pickupDate, returnDate]);
 
+  const { user } = useUserStore();
+
   const handleSubmit = async () => {
     if (!data) return;
+    if (!user) {
+      toast.error("Bạn cần đăng nhập để thực hiện đặt xe.");
+      return;
+    }
+    if (!user.driverLicense) {
+      toast.error("Bạn cần cập nhật giấy phép lái xe để thực hiện đặt xe.");
+      return;
+    }
     setSelectedCar(data);
     requestAnimationFrame(() => {
       setBookingStep(1);
@@ -95,6 +107,16 @@ export default function RentalInformation({ data, isLoading, isError }: Props) {
         <Button
           className="bg-blue-500 text-white hover:bg-blue-300 w-full"
           onClick={handleSubmit}
+          disabled={
+            isLoading ||
+            isError ||
+            !pickupDate ||
+            !returnDate ||
+            daysDifference === undefined ||
+            daysDifference <= 0 ||
+            !data ||
+            data.status.toString() !== "AVAILABLE"
+          }
         >
           Chọn thuê
         </Button>

@@ -64,6 +64,7 @@ const SearchResult = (props: Props) => {
                 seats={car.numOfSeats}
                 rating={car.rating}
                 trips={car.numOfTrips}
+                status={car.status}
                 transmission={car.transmissionType}
                 isLiked={
                   likedCars?.some((likedCar) => likedCar.id === car.id) ?? false
