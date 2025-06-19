@@ -1,24 +1,43 @@
-# 🚗 Car4U Frontend
+# 🚗 Car4U – Self-Drive Car Rental Platform
 
-Car4U là nền tảng thuê xe tự lái kết nối giữa chủ xe và người thuê xe. Đây là source code giao diện người dùng (frontend) được xây dựng bằng **Next.js 14 (App Router)** kết hợp các công nghệ hiện đại như Tailwind CSS, Zustand, shadcn/u.
+Car4U is an innovative self-driving car rental platform designed to bridge the gap between car owners and renters through a seamless and intelligent digital experience.
 
-## 🔧 Công nghệ sử dụng
+This frontend repository contains the user-facing interface of the platform, built with **Next.js 14 (App Router)**, **Tailwind CSS**, and **shadcn/ui** for a modern, responsive, and accessible UI. With state management handled by **Zustand**, and real-time interactions powered by **RESTful APIs** and **chatbots**, Car4U offers a rich, interactive user experience across devices.
+
+Whether you're a car owner looking to earn extra income or a traveler in need of a reliable ride, Car4U simplifies the process with advanced search filters, integrated payment gateways, and AI-driven assistance.
+
+## 🔍 Use Cases
+
+- Car renters can search for available vehicles by location, time, fuel consumption, and distance radius.
+- Car owners can manage their fleet, booking requests, and customer chats from a personalized dashboard.
+- All users enjoy seamless authentication with social logins and real-time support via AI chatbot.
+
+## 💼 Real-World Applications
+
+- Peer-to-peer car sharing in urban areas
+- Fleet management for self-driving rentals
+- Smart booking and availability systems
+- Scalable foundation for mobility-as-a-service (MaaS) solutions
+
+Car4U is more than just a car rental interface — it's a smart mobility tool for the modern traveler.
+
+## 🔧 Technologies Used
 
 - **Next.js 14** (App Router)
 - **React 18**
 - **Tailwind CSS**
-- **shadcn/ui** – UI Components (dựa trên Radix UI)
-- **Zustand** – quản lý trạng thái
-- **Axios** – gọi API
+- **shadcn/ui** – UI Components (based on Radix UI)
+- **Zustand** – state management
+- **Axios** – API communication
 
-## 📌 Tính năng nổi bật
-- 🔍 Tìm kiếm xe theo vị trí, ngày, bán kính, mức tiêu thụ nhiên liệu
-- 📅 Bộ lọc xe nâng cao (filter, pagination, geoNear)
-- 🧾 Thanh toán VNPAY tích hợp
-- 🔒 Đăng nhập với Google/Facebook
-- 💬 Chat bot AI
+## 📌 Key Features
 
-## 🎥 Video demo
+- 🔍 Search cars by location, date, distance radius, and fuel consumption
+- 📅 Advanced filtering (pagination, geoNear location query)
+- 🧾 Integrated **VNPAY** payment gateway
+- 🔒 Login with **Google/Facebook** (OAuth2)
+- 💬 Built-in AI Chatbot assistant
+
+## 🎥 Demo Video
 
 [![Watch the demo](https://th.bing.com/th/id/OIP.73NSUbqteZMSxtis-CRzDwHaEK?rs=1&pid=ImgDetMain)](https://drive.google.com/file/d/1Y8WeYhJIe4uMRF2urwownr12gPZqtnSz/view?usp=sharing)
-
