@@ -13,6 +13,9 @@ export default function CarOwner({ carId }: Props) {
   useEffect(() => {
     getOwner(carId);
   }, [carId]);
+  if (!owner) {
+    return null;
+  }
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-semibold">Chủ xe</h1>

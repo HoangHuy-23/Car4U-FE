@@ -3,6 +3,8 @@ import { useAuthStore } from "@/stores/auth.store";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import UserNavItem from "./UserNavItem";
+import { useUserStore } from "@/stores/user.store";
+import { BotMessageSquare } from "lucide-react";
 
 type Props = {};
 
@@ -20,7 +22,8 @@ const NavItem = [
 ];
 
 const MainNav = (props: Props) => {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
+  const { user } = useUserStore();
   useEffect(() => {
     console.log("isAuthenticated", isAuthenticated);
     console.log("user", user);
@@ -36,6 +39,11 @@ const MainNav = (props: Props) => {
             <Link href={item.link}>{item.name}</Link>
           </li>
         ))}
+        <li className="capitalize font-semibold text-foreground hover:text-primary text-sm">
+          <Link href="/chatbot" className="flex items-center gap-1">
+            <BotMessageSquare /> bot
+          </Link>
+        </li>
         {isAuthenticated ? (
           <UserNavItem />
         ) : (

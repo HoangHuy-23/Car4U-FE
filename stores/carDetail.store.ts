@@ -36,7 +36,10 @@ export const useCarDetailStore = create<iCarDetailStore>((set) => ({
       const data = response.data.data;
       set({ owner: data, error: null });
     } catch (error) {
-      set({ error: "An error occurred while fetching owned cars data." });
+      set({
+        error: "An error occurred while fetching owned cars data.",
+        owner: null,
+      });
     } finally {
       set({ isLoading: false });
     }

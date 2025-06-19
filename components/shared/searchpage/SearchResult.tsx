@@ -2,6 +2,7 @@
 import { useSearchStore } from "@/stores/search.store";
 import { useEffect, useRef } from "react";
 import { CarCard } from "./CarCard";
+import { useUserStore } from "@/stores/user.store";
 
 type Props = {};
 
@@ -14,6 +15,8 @@ const SearchResult = (props: Props) => {
     isLoading,
     hasMore,
   } = useSearchStore();
+
+  const { likedCars } = useUserStore();
 
   const loaderRef = useRef<HTMLDivElement>(null);
 
@@ -61,17 +64,21 @@ const SearchResult = (props: Props) => {
                 seats={car.numOfSeats}
                 rating={car.rating}
                 trips={car.numOfTrips}
+                status={car.status}
                 transmission={car.transmissionType}
+                isLiked={
+                  likedCars?.some((likedCar) => likedCar.id === car.id) ?? false
+                }
               />
             ))}
           {searchResults.length === 0 && !isLoading && (
             <div className="col-span-4 text-center text-gray-500">
-              No car is suitable for your search.
+              Không có kết quả tìm kiếm nào phù hợp.
             </div>
           )}
           {isLoading && (
             <div className="col-span-4 text-center text-gray-500">
-              Loading...
+              Đang tải kết quả tìm kiếm...
             </div>
           )}
         </div>

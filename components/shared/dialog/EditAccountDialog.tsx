@@ -10,25 +10,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useAuthStore } from "@/stores/auth.store";
-import { Calendar as CalendarIcon, Pencil } from "lucide-react";
-import React, { ChangeEvent, useEffect, useState } from "react";
-
+import { useUserStore } from "@/stores/user.store";
+import { Pencil } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function DialogEditAccount() {
-  const { user } = useAuthStore();
+  const { user, updateInfo } = useUserStore();
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState<string>(user?.dob as unknown as string);
   const [username, setUsername] = useState<string | undefined>(
     user?.name || "user"
   );
-  const [gender, setGender] = useState<boolean | null>(user?.gender == "MALE" || true);
+  const [gender, setGender] = useState<boolean | null>(
+    user?.gender == "male" || true
+  );
 
   useEffect(() => {
     if (isOpen) {
       setDate((user?.dob as unknown as string) || "");
       setUsername(user?.name || "");
-      setGender(user?.gender == "MALE" || true);
+      setGender(user?.gender == "male" || true);
     }
   }, [isOpen, user]);
 
@@ -37,18 +38,13 @@ export function DialogEditAccount() {
   };
 
   const handleSave = () => {
-    // if (user && user.id !== undefined) {
-    //   const req: User = {
-    //     ...user,
-    //     fullName: username || "",
-    //     dob: new Date(date) || new Date(),
-    //     gender: gender || false,
-    //   };
-    //   mutate(req);
-    //   setIsOpen(false);
-    // } else {
-    //   console.error("User id is undefined");
-    // }
+    const updatedInfo = {
+      name: username ?? "",
+      dob: new Date(date),
+      gender: gender ? "male" : "female",
+    };
+    updateInfo(updatedInfo);
+    setIsOpen(false);
   };
 
   return (

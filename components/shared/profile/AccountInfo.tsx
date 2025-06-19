@@ -1,16 +1,16 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuthStore } from "@/stores/auth.store";
-import { Link, Luggage, Pencil, Star } from "lucide-react";
+import { formatDateToStringWithoutTime } from "@/lib/dateFormat";
+import { useUserStore } from "@/stores/user.store";
+import { CheckCircle, Link, Luggage, Star } from "lucide-react";
 import { DialogEditAccount } from "../dialog/EditAccountDialog";
-import DialogEditPhone from "../dialog/EditPhoneDialog";
 import DialogEditEmail from "../dialog/EditEmailDialog";
-import { formatDate, formatDateToString, formatDateToStringWithoutTime } from "@/lib/dateFormat";
+import DialogEditPhone from "../dialog/EditPhoneDialog";
+import { Button } from "@/components/ui/button";
 
 export default function AccountInfo() {
-  const { user } = useAuthStore();
-  //const mutation = useMutation({ mutationFn: updateUser });
+  const { user } = useUserStore();
 
   return (
     <div className="bg-white rounded-xl flex flex-col px-5 py-5">
@@ -44,11 +44,21 @@ export default function AccountInfo() {
           <h1 className="font-semibold">{user?.name}</h1>
           <div className="text-sm text-gray-500">
             Tham gia:{" "}
-            {formatDateToStringWithoutTime(new Date(user?.createdAt || "")) ?? "--/--/--"}
+            {formatDateToStringWithoutTime(new Date(user?.createdAt || "")) ??
+              "--/--/--"}
           </div>
           <div className="flex px-2 py-2 border rounded-md justify-center">
-            <span className="mx-2 font-bold">{user?.rating}</span>
-            <Star className="text-yellow-500" />
+            {user?.rating === null || user?.rating == 0 ? (
+              <>
+                <Star className="text-gray-400" />
+                <span className="mx-2 font-bold text-sm">Chưa có đánh giá</span>
+              </>
+            ) : (
+              <>
+                <Star className="text-yellow-500" />
+                <span className="mx-2 font-bold">{user?.rating}</span>
+              </>
+            )}
           </div>
         </div>
         {/* right */}
@@ -63,7 +73,13 @@ export default function AccountInfo() {
             </div>
             <div className="flex justify-between">
               <p className="text-sm">Giới tính</p>
-              <p>{`${user?.gender === "" ? "--/--/--" : user?.gender}`}</p>
+              <p>{`${
+                user?.gender === ""
+                  ? "--/--/--"
+                  : user?.gender == "male"
+                  ? "Nam"
+                  : "Nữ"
+              }`}</p>
             </div>
           </div>
           {/* contact */}
@@ -79,10 +95,16 @@ export default function AccountInfo() {
               <p className="text-sm">Email</p>
               <div className="flex justify-center items-center">
                 <p>{`${user?.email === null ? "--/--/--" : user?.email}`}</p>
-                <DialogEditEmail />
+                {/* <DialogEditEmail /> */}
+                <Button
+                  variant="link"
+                  className="ml-2 rounded-full px-2 py-2 text-green-500"
+                >
+                  <CheckCircle width={16} height={16} />
+                </Button>
               </div>
             </div>
-            <div className="flex justify-between">
+            {/* <div className="flex justify-between">
               <p className="text-sm">Facebook</p>
               <div className="flex justify-center items-center">
                 <p>{`${user?.facebookAccountId === null ? "--/--/--" : user?.facebookAccountId}`}</p>
@@ -95,7 +117,7 @@ export default function AccountInfo() {
                 <p>{`${user?.googleAccountId === null ? "--/--/--" : user?.googleAccountId}`}</p>
                 <Link width={16} height={16} className="ml-2 mr-1" />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

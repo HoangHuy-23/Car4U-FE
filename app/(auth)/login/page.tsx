@@ -128,7 +128,10 @@ function LoginPage({}: Props) {
 
                 <Button
                   type="button"
-                  onClick={loginWithFacebook}
+                  // onClick={loginWithFacebook}
+                  onClick={() =>
+                    toast.error("Chức năng này đang được phát triển")
+                  }
                   variant="outline"
                   className="w-full gap-2"
                   disabled={isLoading}

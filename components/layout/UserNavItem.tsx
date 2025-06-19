@@ -1,7 +1,7 @@
 "use client";
 import { useAuthStore } from "@/stores/auth.store";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,12 +13,18 @@ import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useUserStore } from "@/stores/user.store";
 
 type Props = {};
 
 const UserNavItem = (props: Props) => {
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const { logout } = useAuthStore();
+  const { user } = useUserStore();
+  const [avatarUrl, setAvatarUrl] = React.useState<string | null>(null);
+  useEffect(() => {
+    setAvatarUrl(user?.avatar!);
+  }, [user]);
   const handleLogout = () => {
     logout();
     router.push("/");
@@ -27,11 +33,7 @@ const UserNavItem = (props: Props) => {
     <DropdownMenu>
       <DropdownMenuTrigger className="flex justify-center items-center px-2 cursor-pointer capitalize py-2 font-semibold text-sm hover:text-blue-500">
         <Avatar>
-          <AvatarImage
-            src={user?.avatar || ""}
-            alt="Avatar"
-            className="w-8 h-8"
-          />
+          <AvatarImage src={avatarUrl!} alt="Avatar" className="w-8 h-8" />
           <AvatarFallback className="w-8 h-8">
             {user?.name.charAt(0)}
           </AvatarFallback>

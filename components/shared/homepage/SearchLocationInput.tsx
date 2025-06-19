@@ -53,8 +53,7 @@ const SearchLocationInput = ({
 
   useEffect(() => {
     setValue(location);
-  }
-  , [location]);
+  }, [location]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

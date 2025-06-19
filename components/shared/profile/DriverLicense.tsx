@@ -7,19 +7,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/stores/auth.store";
 import Image from "next/image";
+import { useUserStore } from "@/stores/user.store";
+import { DriverLicense } from "@/types/user.type";
 
-export default function DriverLicense() {
+export default function DriverLicenseForm() {
   const handleChangeFileToUrl = (file: File): string => {
     const imageUrl = URL.createObjectURL(file);
     return imageUrl;
   };
-  // const { mutate, isPending, isError } = useUploadDriverLicense();
 
-  const { user } = useAuthStore();
+  const { user, updateDriverLicense, isLoading } = useUserStore();
   const license = user?.driverLicense;
 
   const [isEdit, setIsEdit] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
 
   const [code, setCode] = useState<string>(license?.licenseNumber || "");
   const [fullName, setFullName] = useState<string>(license?.name || "");
@@ -53,24 +53,20 @@ export default function DriverLicense() {
   };
 
   const handleBtnSave = () => {
-    // setIsSaving(true);
-    // const req: DriverLicenseReq = {
-    //   code: code,
-    //   fullName: fullName,
-    //   dob: new Date(dob),
-    //   image: file || null,
-    //   status: "PENDING",
-    // };
-    // mutate(req);
-    // console.log(code, fullName, dob);
+    const req: DriverLicense = {
+      licenseNumber: code,
+      name: fullName,
+      dob: new Date(dob),
+      file: file || null,
+    };
+    updateDriverLicense(req)
   };
 
-  // useEffect(() => {
-  //   if (!isPending && isSaving) {
-  //     setIsSaving(false); // Nếu không còn pending và đang trong quá trình save, đặt isSaving thành false
-  //     setIsEdit(false); // Đặt setIsEdit(false) ở đây để ngừng chế độ chỉnh sửa
-  //   }
-  // }, [isPending, isSaving]);
+  useEffect(() => {
+    if (!isLoading) {
+      setIsEdit(false); // Đặt setIsEdit(false) ở đây để ngừng chế độ chỉnh sửa
+    }
+  }, [isLoading]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -126,7 +122,13 @@ export default function DriverLicense() {
           <div
             className={`flex justify-center items-center h-full relative border rounded-lg`}
           >
-            <Image alt="" src={image || ""} className="absolute w-full" />
+            <Image
+              alt=""
+              src={image || "/no-image.png"}
+              className="absolute w-full h-full object-fill rounded-lg"
+              width={200}
+              height={200}
+            />
 
             <input
               disabled={!isEdit}

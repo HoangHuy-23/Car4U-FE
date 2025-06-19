@@ -1,36 +1,12 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/stores/auth.store";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import { Suspense } from "react";
+import GoogleLoginCallBack from "./GoogleLoginCallBack";
 
-type Props = {};
-
-const GoogleLoginCallBack = (props: Props) => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const { loginSocialCallback, error } = useAuthStore();
-  useEffect(() => {
-    const code = searchParams.get("code");
-    const provider = searchParams.get("provider");
-    if (code) {
-      loginSocialCallback("google", code);
-    }
-  }, [searchParams, loginSocialCallback]);
-
-  useEffect(() => {
-    if (error) {
-      router.push("/login");
-    }
-  }, [error, router]);
-
+export default function Page() {
   return (
-    <div>
-      <h1 className="text-3xl font-bold tracking-tight text-primary">
-        Login with Google
-      </h1>
-    </div>
+    <Suspense
+      fallback={<div className="text-center mt-20">Đang đăng nhập...</div>}
+    >
+      <GoogleLoginCallBack />
+    </Suspense>
   );
-};
-
-export default GoogleLoginCallBack;
+}

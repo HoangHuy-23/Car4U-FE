@@ -41,7 +41,7 @@ const SearchBar = (props: Props) => {
     tomorrow.setDate(now.getDate() + 1);
     setPickupDate(now);
     setReturnDate(tomorrow);
-    setLocation("saigon");
+    setLocation("hanoi");
   }, []);
 
   const revalidateForm = () => {

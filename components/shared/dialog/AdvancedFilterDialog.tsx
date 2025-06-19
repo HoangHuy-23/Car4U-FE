@@ -1,18 +1,19 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
-  DialogTrigger,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
+import { formatCurrency } from "@/lib/currencyFormat";
+import { useSearchStore } from "@/stores/search.store";
 import { SlidersHorizontal } from "lucide-react";
 import {
   Select,
@@ -22,9 +23,6 @@ import {
   SelectValue,
 } from "../../ui/select";
 import { Separator } from "../../ui/separator";
-import { formatCurrency } from "@/lib/currencyFormat";
-import { useSearchStore } from "@/stores/search.store";
-import { Value } from "@radix-ui/react-select";
 
 const FEATURES = [
   { value: "MAP", label: "Bản đồ" },

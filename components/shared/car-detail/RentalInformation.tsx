@@ -13,6 +13,8 @@ import { useSearchStore } from "@/stores/search.store";
 import { useBookingStore } from "@/stores/booking.store";
 import { calculateDaysDifference } from "@/lib/dateFormat";
 import { calculatorInsurance, calculatorRentalFee } from "@/lib/calculator";
+import { useUserStore } from "@/stores/user.store";
+import { toast } from "sonner";
 
 type Props = {
   data: Car | null;
@@ -22,8 +24,14 @@ type Props = {
 
 export default function RentalInformation({ data, isLoading, isError }: Props) {
   const router = useRouter();
-  const { pickupDate, returnDate, setPickupDate, setReturnDate } =
-    useBookingStore();
+  const {
+    pickupDate,
+    returnDate,
+    setPickupDate,
+    setReturnDate,
+    setBookingStep,
+    setSelectedCar,
+  } = useBookingStore();
   const [daysDifference, setDaysDifference] = useState<number>();
 
   useEffect(() => {
@@ -33,6 +41,25 @@ export default function RentalInformation({ data, isLoading, isError }: Props) {
     );
     setDaysDifference(updatedDaysDifference);
   }, [pickupDate, returnDate]);
+
+  const { user } = useUserStore();
+
+  const handleSubmit = async () => {
+    if (!data) return;
+    if (!user) {
+      toast.error("Bạn cần đăng nhập để thực hiện đặt xe.");
+      return;
+    }
+    if (!user.driverLicense) {
+      toast.error("Bạn cần cập nhật giấy phép lái xe để thực hiện đặt xe.");
+      return;
+    }
+    setSelectedCar(data);
+    requestAnimationFrame(() => {
+      setBookingStep(1);
+      router.push(`/booking/${data?.id}/contact-information`);
+    });
+  };
 
   return (
     <div className="bg-blue-50 rounded-md px-6 py-4 flex flex-col gap-4">
@@ -79,18 +106,17 @@ export default function RentalInformation({ data, isLoading, isError }: Props) {
         </div>
         <Button
           className="bg-blue-500 text-white hover:bg-blue-300 w-full"
-          onClick={() => {
-            router.push(`/booking/${data?.id}`);
-            sessionStorage.setItem(
-              "booking-carId",
-              data?.id as unknown as string
-            );
-            sessionStorage.setItem("booking-step", "1");
-            if (data) {
-              // dispatch(setSelectedCar(data));
-              // dispatch(setBookingStep(1));
-            }
-          }}
+          onClick={handleSubmit}
+          disabled={
+            isLoading ||
+            isError ||
+            !pickupDate ||
+            !returnDate ||
+            daysDifference === undefined ||
+            daysDifference <= 0 ||
+            !data ||
+            data.status.toString() !== "AVAILABLE"
+          }
         >
           Chọn thuê
         </Button>

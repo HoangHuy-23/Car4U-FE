@@ -14,10 +14,26 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
+const PUBLIC_PATHS = ["/cars/filter", "/cars/external", "/cars/owners"];
+
 axiosClient.interceptors.request.use(
   async (config) => {
     const accessToken = await getAccessToken();
-    if (accessToken) {
+    // Tạo URL từ base + config.url
+    const fullUrl = new URL(
+      config.url!,
+      axiosClient.defaults.baseURL // đảm bảo xử lý đúng cả khi url là relative
+    );
+    const pathname = fullUrl.pathname;
+
+    const isPublicPath = PUBLIC_PATHS.some((publicPath) =>
+      pathname.startsWith(publicPath)
+    );
+    console.log("[Axios Interceptor] URL:", fullUrl.toString());
+    console.log("[Axios Interceptor] pathname:", pathname);
+    console.log("[Axios Interceptor] isPublicPath:", isPublicPath);
+    console.log("[Axios Interceptor] accessToken:", accessToken ? "YES" : "NO");
+    if (accessToken && !isPublicPath) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;

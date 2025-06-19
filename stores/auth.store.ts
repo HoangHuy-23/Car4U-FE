@@ -4,10 +4,12 @@ import { User } from "@/types/user.type";
 import Cookies from "js-cookie";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { useUserStore } from "./user.store";
+import { useBookingStore } from "./booking.store";
 
 interface iAuthStore {
   isAuthenticated: boolean;
-  user: User | null;
+  // user: User | null;
   isLoading: boolean;
   error: string | null;
   login: (dataLogin: DataLogin) => Promise<void>;
@@ -23,7 +25,7 @@ export const useAuthStore = create<iAuthStore>()(
   persist(
     (set, get) => ({
       isAuthenticated: false,
-      user: null,
+      // user: null,
       isLoading: false,
       error: null,
 
@@ -31,7 +33,7 @@ export const useAuthStore = create<iAuthStore>()(
         set({ isLoading: true, error: null });
         try {
           const res = await axiosClient.post("/auth/login", dataLogin);
-          if (res) {
+          if (res.status === 200 && res.data.data) {
             const accessToken = res.data.data.accessToken;
             const refreshToken = res.data.data.refreshToken;
             Cookies.set("access_token", accessToken, {
@@ -64,9 +66,13 @@ export const useAuthStore = create<iAuthStore>()(
           });
           Cookies.remove("access_token");
           Cookies.remove("refresh_token");
-          set({ isAuthenticated: false, user: null, error: null });
+          set({ isAuthenticated: false, error: null });
           useAuthStore.persist.clearStorage(); // Clear the storage
           useAuthStore.persist.rehydrate(); // Rehydrate the store
+          useUserStore.persist.clearStorage(); // Clear user store
+          useUserStore.persist.rehydrate(); // Rehydrate user store
+          useBookingStore.persist.clearStorage(); // Clear booking store
+          useBookingStore.persist.rehydrate(); // Rehydrate booking store
         } catch (error) {
           set({ error: "An error occurred during logout." });
         } finally {
@@ -102,11 +108,12 @@ export const useAuthStore = create<iAuthStore>()(
 
       getMyProfile: async (): Promise<void> => {
         try {
-          const { data } = await axiosClient.get("/auth/me");
-          if (data) {
-            set({ user: data.data, isAuthenticated: true, error: null });
+          const data = await axiosClient.get("/auth/me");
+          if (data.status === 200 && data.data) {
+            useUserStore.getState().setUser(data.data.data as User);
+            set({ isAuthenticated: true, error: null });
           } else {
-            set({ error: data.message, isAuthenticated: false });
+            set({ error: data.data.message, isAuthenticated: false });
           }
         } catch (error) {
           set({ error: "An error occurred while fetching user profile." });
